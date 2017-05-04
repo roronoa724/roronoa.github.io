@@ -197,7 +197,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -207,7 +207,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -273,7 +273,7 @@
               
                 
                 <a class="post-title-link" href="/2017/03/29/每天十道JAVA面试题-DAY1/" itemprop="url">
-                  Untitled
+                  Unbenannt
                 </a>
               
             
@@ -287,7 +287,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-29T22:38:26+08:00">
                 2017-03-29
@@ -329,8 +329,8 @@
           
             <h1 id="每天十道Java面试题"><a href="#每天十道Java面试题" class="headerlink" title="每天十道Java面试题"></a>每天十道Java面试题</h1><h2 id="DAY-1"><a href="#DAY-1" class="headerlink" title="DAY 1"></a>DAY 1</h2><h3 id="QUESTION-1-请简单介绍一下Java这门语言"><a href="#QUESTION-1-请简单介绍一下Java这门语言" class="headerlink" title="QUESTION 1: 请简单介绍一下Java这门语言"></a>QUESTION 1: 请简单介绍一下Java这门语言</h3><p>Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。</p>
 <h4 id="1-Java语言是什么？"><a href="#1-Java语言是什么？" class="headerlink" title="1. Java语言是什么？"></a>1. Java语言是什么？</h4><p>Java语言即Java程序的源码，是人类可读的编程语言，基于类，面向对象，并且比较易读易写。其受Java语言规范(Java Language Specification，JLS)的约束。</p>
-<h4 id="2-JVM是什么？"><a href="#2-JVM是什么？" class="headerlink" title="2. JVM是什么？"></a>2. JVM是什么？</h4><p>JVM是一个程序，提供了运行Java程序所需的运行时环境。如果某个硬件和操作系统平台没有相应的JVM，就不能运行Java程序。</p>
-<p>我们熟知的命令：<br><figure class="highlight"><figcaption><span><arguments> <program name="">```  </program></arguments></span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">实际上就是在操作系统的一个进程中启动JVM，提供Java运行时环境，然后在刚启动的虚拟机中运行指定的程序。</div><div class="line">#### 3. JVM有哪些特点？</div><div class="line">1. 提供给JVM运行的程序并不是Java语言源码，源码必须转换(或编译)成为一种称为**Java字节码**的格式，并且必须是类文件格式，其扩展名为.class。从这个角度看，JVM实际上就是字节码格式程序的解释器，一次只执行字节码中的一个指令。</div><div class="line">2. 较之C和C++的方式，JVM提供了一个相对**安全的执行环境**，它代替开发者**管理内存**，并且提供了一个**跨平台**的执行环境。</div><div class="line">3. 另外一个很少被提及的特点是，JVM可以**使用运行时信息进行自我管理**(可能是真正意义上第一个具有这种特性的主流开发平台)。JVM会收集程序运行时的信息，并对如何执行代码做出更好的决定。(比如HotSpot JVM，就能够识别出程序中的“热点方法”，然后跳过JVM解释器，直接把这一部分编译成机器码，这是通过一种叫JIT编译(Just-In-Time compilation)的技术实现的)。</div><div class="line"></div><div class="line">### QUESTION 2: 请简单介绍一下Java程序的生命周期？</div><div class="line">下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。  </div><div class="line">![Java Program Life Cycle](/images/java_program_life_cycle.png)  </div><div class="line">整个流程从Java源码开始，经过Javac程序处理后得到类文件(.class)，类文件中保存的是编译之后的Java字节码，同时它也是Java平台能够处理的最小功能单位，是把新代码传递给运行中程序的唯一方式。  </div><div class="line">那么这里又引出来一些新的问题：</div><div class="line">#### 1.字节码是什么？为什么叫字节码？它真的和设备无关么？</div><div class="line">字节码是位于Java源码和机器码之间的一种"中间表现形式"，其目的是提供一种能够让JVM解释器高效执行的格式。  </div><div class="line">叫字节码的原因是因为指令码(操作码)只占有**一个字节**(有些操作可以带参数)，所以共计只有256个可用的指令。然而实际上大概只会使用200个左右。  </div><div class="line">字节码不管在哪种设备中生成，其格式都是一样的，其中也包括设备使用的字节顺序(big-endian)。</div><div class="line"></div><div class="line">#### 2.Javac是编译器么？</div><div class="line">从标准的编译定义来看，Javac非常像编译器的“前半部分”，生成的中间表现形式可以进一步处理生成机器码。不过因为类文件的生成是构建过程中单独的异步，通常开发者也可以把运行Javac的操作称为编译。</div><div class="line"></div><div class="line">#### 3.类文件是怎么加载进虚拟机的？</div><div class="line">这个之后详细介绍。</div><div class="line"></div><div class="line">### QUESTION 3: 请简单介绍一下类和对象的定义？</div><div class="line">**类**是一段代码的名称，其中包含很多保存数据值的字段和操作这些值的方法。类是Java支持的五种引用类型之一，而且是最重要的一种。  </div><div class="line">类是一种数据类型，而类表示的值就是**对象**。对象一般通过实例化类创建，方法是使用new关键字并调用构造方法，例子如下：  </div><div class="line">```Point p = new Point(1.0,2.0);</div></pre></td></tr></table></figure></p>
+<h4 id="2-JVM是什么？"><a href="#2-JVM是什么？" class="headerlink" title="2. JVM是什么？"></a>2. JVM是什么？</h4><p>JVM是一个程序，提供了运行Java程序所需的运行时环境。如果某个硬件和操作系统平台没有相应的JVM，就不能运行Java程序。<br>我们熟知的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">java &lt;arguments&gt; &lt;program name&gt;</div><div class="line">```  </div><div class="line"></div><div class="line">实际上就是在操作系统的一个进程中启动JVM，提供Java运行时环境，然后在刚启动的虚拟机中运行指定的程序。</div><div class="line">#### 3. JVM有哪些特点？</div><div class="line">1. 提供给JVM运行的程序并不是Java语言源码，源码必须转换(或编译)成为一种称为**Java字节码**的格式，并且必须是类文件格式，其扩展名为.class。从这个角度看，JVM实际上就是字节码格式程序的解释器，一次只执行字节码中的一个指令。</div><div class="line">2. 较之C和C++的方式，JVM提供了一个相对**安全的执行环境**，它代替开发者**管理内存**，并且提供了一个**跨平台**的执行环境。</div><div class="line">3. 另外一个很少被提及的特点是，JVM可以**使用运行时信息进行自我管理**(可能是真正意义上第一个具有这种特性的主流开发平台)。JVM会收集程序运行时的信息，并对如何执行代码做出更好的决定。(比如HotSpot JVM，就能够识别出程序中的“热点方法”，然后跳过JVM解释器，直接把这一部分编译成机器码，这是通过一种叫JIT编译(Just-In-Time compilation)的技术实现的)。</div><div class="line"></div><div class="line">### QUESTION 2: 请简单介绍一下Java程序的生命周期？</div><div class="line">下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。  </div><div class="line">![Java Program Life Cycle](/images/java_program_life_cycle.png)  </div><div class="line">整个流程从Java源码开始，经过Javac程序处理后得到类文件(.class)，类文件中保存的是编译之后的Java字节码，同时它也是Java平台能够处理的最小功能单位，是把新代码传递给运行中程序的唯一方式。  </div><div class="line">那么这里又引出来一些新的问题：</div><div class="line">#### 1.字节码是什么？为什么叫字节码？它真的和设备无关么？</div><div class="line">字节码是位于Java源码和机器码之间的一种&quot;中间表现形式&quot;，其目的是提供一种能够让JVM解释器高效执行的格式。  </div><div class="line">叫字节码的原因是因为指令码(操作码)只占有**一个字节**(有些操作可以带参数)，所以共计只有256个可用的指令。然而实际上大概只会使用200个左右。  </div><div class="line">字节码不管在哪种设备中生成，其格式都是一样的，其中也包括设备使用的字节顺序(big-endian)。</div><div class="line"></div><div class="line">#### 2.Javac是编译器么？</div><div class="line">从标准的编译定义来看，Javac非常像编译器的“前半部分”，生成的中间表现形式可以进一步处理生成机器码。不过因为类文件的生成是构建过程中单独的异步，通常开发者也可以把运行Javac的操作称为编译。</div><div class="line"></div><div class="line">#### 3.类文件是怎么加载进虚拟机的？</div><div class="line">这个之后详细介绍。</div><div class="line"></div><div class="line">### QUESTION 3: 请简单介绍一下类和对象的定义？</div><div class="line">**类**是一段代码的名称，其中包含很多保存数据值的字段和操作这些值的方法。类是Java支持的五种引用类型之一，而且是最重要的一种。  </div><div class="line">类是一种数据类型，而类表示的值就是**对象**。对象一般通过实例化类创建，方法是使用new关键字并调用构造方法，例子如下：  </div><div class="line">```Point p = new Point(1.0,2.0);</div></pre></td></tr></table></figure>
 <h3 id="QUESTION-4-请比较一下Java中引用类型和基本类型的不同？"><a href="#QUESTION-4-请比较一下Java中引用类型和基本类型的不同？" class="headerlink" title="QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？"></a>QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？</h3><p>在Java中，引用类型和对象与基本类型和基本值有着本质的区别。  </p>
 <ol>
 <li>八种基本类型由Java语言定义，程序员不能定义新的基本类型，而引用类型由用户定义，因此可以有无限多个。</li>
@@ -479,7 +479,7 @@
             <div class="site-state-item site-state-posts">
               <a href="/archives">
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -533,7 +533,7 @@
 
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
