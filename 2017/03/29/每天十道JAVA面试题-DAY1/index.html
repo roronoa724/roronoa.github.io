@@ -96,7 +96,7 @@
 <meta property="og:description" content="每天十道Java面试题DAY 1QUESTION 1: 请简单介绍一下Java这门语言Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。
 1. Java语言是什么？Java语言即Java程序的源码，是人类可读的编程语言，基于类，面向对象，并且比较易读易写。其受Java语言规范(Java Languag">
 <meta property="og:image" content="http://roronoa.space/images/java_program_life_cycle.png">
-<meta property="og:updated_time" content="2017-05-04T02:04:10.000Z">
+<meta property="og:updated_time" content="2017-05-04T13:14:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="roronoa space">
 <meta name="twitter:description" content="每天十道Java面试题DAY 1QUESTION 1: 请简单介绍一下Java这门语言Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。
@@ -338,7 +338,7 @@
 <li>另外一个很少被提及的特点是，JVM可以<strong>使用运行时信息进行自我管理</strong>(可能是真正意义上第一个具有这种特性的主流开发平台)。JVM会收集程序运行时的信息，并对如何执行代码做出更好的决定。(比如HotSpot JVM，就能够识别出程序中的“热点方法”，然后跳过JVM解释器，直接把这一部分编译成机器码，这是通过一种叫JIT编译(Just-In-Time compilation)的技术实现的)。</li>
 </ol>
 <h3 id="QUESTION-2-请简单介绍一下Java程序的生命周期？"><a href="#QUESTION-2-请简单介绍一下Java程序的生命周期？" class="headerlink" title="QUESTION 2: 请简单介绍一下Java程序的生命周期？"></a>QUESTION 2: 请简单介绍一下Java程序的生命周期？</h3><p>下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。</p>
-<p><img src="images/java_program_life_cycle.png" alt="Java Program Life Cycle"></p>
+<p><img src="/images/java_program_life_cycle.png" alt="Java Program Life Cycle"></p>
 <p>整个流程从Java源码开始，经过Javac程序处理后得到类文件(.class)，类文件中保存的是编译之后的Java字节码，同时它也是Java平台能够处理的最小功能单位，是把新代码传递给运行中程序的唯一方式。</p>
 <p>那么这里又引出来一些新的问题：</p>
 <h4 id="1-字节码是什么？为什么叫字节码？它真的和设备无关么？"><a href="#1-字节码是什么？为什么叫字节码？它真的和设备无关么？" class="headerlink" title="1.字节码是什么？为什么叫字节码？它真的和设备无关么？"></a>1.字节码是什么？为什么叫字节码？它真的和设备无关么？</h4><p>字节码是位于Java源码和机器码之间的一种”中间表现形式”，其目的是提供一种能够让JVM解释器高效执行的格式。</p>
