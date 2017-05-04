@@ -95,13 +95,11 @@
 <meta property="og:site_name" content="roronoa space">
 <meta property="og:description" content="每天十道Java面试题DAY 1QUESTION 1: 请简单介绍一下Java这门语言Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。
 1. Java语言是什么？Java语言即Java程序的源码，是人类可读的编程语言，基于类，面向对象，并且比较易读易写。其受Java语言规范(Java Languag">
-<meta property="og:image" content="http://roronoa.space/images/java_program_life_cycle.png">
-<meta property="og:updated_time" content="2017-05-04T13:14:29.000Z">
+<meta property="og:updated_time" content="2017-05-04T13:27:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="roronoa space">
 <meta name="twitter:description" content="每天十道Java面试题DAY 1QUESTION 1: 请简单介绍一下Java这门语言Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。
 1. Java语言是什么？Java语言即Java程序的源码，是人类可读的编程语言，基于类，面向对象，并且比较易读易写。其受Java语言规范(Java Languag">
-<meta name="twitter:image" content="http://roronoa.space/images/java_program_life_cycle.png">
 
 
 
@@ -201,7 +199,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -211,7 +209,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -288,7 +286,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-29T22:38:26+08:00">
                 2017-03-29
@@ -329,26 +327,8 @@
         <h1 id="每天十道Java面试题"><a href="#每天十道Java面试题" class="headerlink" title="每天十道Java面试题"></a>每天十道Java面试题</h1><h2 id="DAY-1"><a href="#DAY-1" class="headerlink" title="DAY 1"></a>DAY 1</h2><h3 id="QUESTION-1-请简单介绍一下Java这门语言"><a href="#QUESTION-1-请简单介绍一下Java这门语言" class="headerlink" title="QUESTION 1: 请简单介绍一下Java这门语言"></a>QUESTION 1: 请简单介绍一下Java这门语言</h3><p>Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。</p>
 <h4 id="1-Java语言是什么？"><a href="#1-Java语言是什么？" class="headerlink" title="1. Java语言是什么？"></a>1. Java语言是什么？</h4><p>Java语言即Java程序的源码，是人类可读的编程语言，基于类，面向对象，并且比较易读易写。其受Java语言规范(Java Language Specification，JLS)的约束。</p>
 <h4 id="2-JVM是什么？"><a href="#2-JVM是什么？" class="headerlink" title="2. JVM是什么？"></a>2. JVM是什么？</h4><p>JVM是一个程序，提供了运行Java程序所需的运行时环境。如果某个硬件和操作系统平台没有相应的JVM，就不能运行Java程序。</p>
-<p>我们熟知的命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java &lt;arguments&gt; &lt;program name&gt;</div></pre></td></tr></table></figure>
-<p>实际上就是在操作系统的一个进程中启动JVM，提供Java运行时环境，然后在刚启动的虚拟机中运行指定的程序。</p>
-<h4 id="3-JVM有哪些特点？"><a href="#3-JVM有哪些特点？" class="headerlink" title="3. JVM有哪些特点？"></a>3. JVM有哪些特点？</h4><ol>
-<li>提供给JVM运行的程序并不是Java语言源码，源码必须转换(或编译)成为一种称为<strong>Java字节码</strong>的格式，并且必须是类文件格式，其扩展名为.class。从这个角度看，JVM实际上就是字节码格式程序的解释器，一次只执行字节码中的一个指令。</li>
-<li>较之C和C++的方式，JVM提供了一个相对<strong>安全的执行环境</strong>，它代替开发者<strong>管理内存</strong>，并且提供了一个<strong>跨平台</strong>的执行环境。</li>
-<li>另外一个很少被提及的特点是，JVM可以<strong>使用运行时信息进行自我管理</strong>(可能是真正意义上第一个具有这种特性的主流开发平台)。JVM会收集程序运行时的信息，并对如何执行代码做出更好的决定。(比如HotSpot JVM，就能够识别出程序中的“热点方法”，然后跳过JVM解释器，直接把这一部分编译成机器码，这是通过一种叫JIT编译(Just-In-Time compilation)的技术实现的)。</li>
-</ol>
-<h3 id="QUESTION-2-请简单介绍一下Java程序的生命周期？"><a href="#QUESTION-2-请简单介绍一下Java程序的生命周期？" class="headerlink" title="QUESTION 2: 请简单介绍一下Java程序的生命周期？"></a>QUESTION 2: 请简单介绍一下Java程序的生命周期？</h3><p>下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。</p>
-<p><img src="/images/java_program_life_cycle.png" alt="Java Program Life Cycle"></p>
-<p>整个流程从Java源码开始，经过Javac程序处理后得到类文件(.class)，类文件中保存的是编译之后的Java字节码，同时它也是Java平台能够处理的最小功能单位，是把新代码传递给运行中程序的唯一方式。</p>
-<p>那么这里又引出来一些新的问题：</p>
-<h4 id="1-字节码是什么？为什么叫字节码？它真的和设备无关么？"><a href="#1-字节码是什么？为什么叫字节码？它真的和设备无关么？" class="headerlink" title="1.字节码是什么？为什么叫字节码？它真的和设备无关么？"></a>1.字节码是什么？为什么叫字节码？它真的和设备无关么？</h4><p>字节码是位于Java源码和机器码之间的一种”中间表现形式”，其目的是提供一种能够让JVM解释器高效执行的格式。</p>
-<p>叫字节码的原因是因为指令码(操作码)只占有<strong>一个字节</strong>(有些操作可以带参数)，所以共计只有256个可用的指令。然而实际上大概只会使用200个左右。</p>
-<p>字节码不管在哪种设备中生成，其格式都是一样的，其中也包括设备使用的字节顺序(big-endian)。</p>
-<h4 id="2-Javac是编译器么？"><a href="#2-Javac是编译器么？" class="headerlink" title="2.Javac是编译器么？"></a>2.Javac是编译器么？</h4><p>从标准的编译定义来看，Javac非常像编译器的“前半部分”，生成的中间表现形式可以进一步处理生成机器码。不过因为类文件的生成是构建过程中单独的异步，通常开发者也可以把运行Javac的操作称为编译。</p>
-<h4 id="3-类文件是怎么加载进虚拟机的？"><a href="#3-类文件是怎么加载进虚拟机的？" class="headerlink" title="3.类文件是怎么加载进虚拟机的？"></a>3.类文件是怎么加载进虚拟机的？</h4><p>这个之后详细介绍。</p>
-<h3 id="QUESTION-3-请简单介绍一下类和对象的定义？"><a href="#QUESTION-3-请简单介绍一下类和对象的定义？" class="headerlink" title="QUESTION 3: 请简单介绍一下类和对象的定义？"></a>QUESTION 3: 请简单介绍一下类和对象的定义？</h3><p><strong>类</strong>是一段代码的名称，其中包含很多保存数据值的字段和操作这些值的方法。类是Java支持的五种引用类型之一，而且是最重要的一种。</p>
-<p>类是一种数据类型，而类表示的值就是<strong>对象</strong>。对象一般通过实例化类创建，方法是使用new关键字并调用构造方法，例子如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Point p = new Point(1.0,2.0);</div></pre></td></tr></table></figure></p>
-<h3 id="QUESTION-4-请比较一下Java中引用类型和基本类型的不同？"><a href="#QUESTION-4-请比较一下Java中引用类型和基本类型的不同？" class="headerlink" title="QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？"></a>QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？</h3><p>在Java中，引用类型和对象与基本类型和基本值有着本质的区别。</p>
+<p>我们熟知的命令：<br><figure class="highlight"><figcaption><span><arguments> <program name="">```  </program></arguments></span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">实际上就是在操作系统的一个进程中启动JVM，提供Java运行时环境，然后在刚启动的虚拟机中运行指定的程序。</div><div class="line">#### 3. JVM有哪些特点？</div><div class="line">1. 提供给JVM运行的程序并不是Java语言源码，源码必须转换(或编译)成为一种称为**Java字节码**的格式，并且必须是类文件格式，其扩展名为.class。从这个角度看，JVM实际上就是字节码格式程序的解释器，一次只执行字节码中的一个指令。</div><div class="line">2. 较之C和C++的方式，JVM提供了一个相对**安全的执行环境**，它代替开发者**管理内存**，并且提供了一个**跨平台**的执行环境。</div><div class="line">3. 另外一个很少被提及的特点是，JVM可以**使用运行时信息进行自我管理**(可能是真正意义上第一个具有这种特性的主流开发平台)。JVM会收集程序运行时的信息，并对如何执行代码做出更好的决定。(比如HotSpot JVM，就能够识别出程序中的“热点方法”，然后跳过JVM解释器，直接把这一部分编译成机器码，这是通过一种叫JIT编译(Just-In-Time compilation)的技术实现的)。</div><div class="line"></div><div class="line">### QUESTION 2: 请简单介绍一下Java程序的生命周期？</div><div class="line">下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。  </div><div class="line">![Java Program Life Cycle](/images/java_program_life_cycle.png)  </div><div class="line">整个流程从Java源码开始，经过Javac程序处理后得到类文件(.class)，类文件中保存的是编译之后的Java字节码，同时它也是Java平台能够处理的最小功能单位，是把新代码传递给运行中程序的唯一方式。  </div><div class="line">那么这里又引出来一些新的问题：</div><div class="line">#### 1.字节码是什么？为什么叫字节码？它真的和设备无关么？</div><div class="line">字节码是位于Java源码和机器码之间的一种"中间表现形式"，其目的是提供一种能够让JVM解释器高效执行的格式。  </div><div class="line">叫字节码的原因是因为指令码(操作码)只占有**一个字节**(有些操作可以带参数)，所以共计只有256个可用的指令。然而实际上大概只会使用200个左右。  </div><div class="line">字节码不管在哪种设备中生成，其格式都是一样的，其中也包括设备使用的字节顺序(big-endian)。</div><div class="line"></div><div class="line">#### 2.Javac是编译器么？</div><div class="line">从标准的编译定义来看，Javac非常像编译器的“前半部分”，生成的中间表现形式可以进一步处理生成机器码。不过因为类文件的生成是构建过程中单独的异步，通常开发者也可以把运行Javac的操作称为编译。</div><div class="line"></div><div class="line">#### 3.类文件是怎么加载进虚拟机的？</div><div class="line">这个之后详细介绍。</div><div class="line"></div><div class="line">### QUESTION 3: 请简单介绍一下类和对象的定义？</div><div class="line">**类**是一段代码的名称，其中包含很多保存数据值的字段和操作这些值的方法。类是Java支持的五种引用类型之一，而且是最重要的一种。  </div><div class="line">类是一种数据类型，而类表示的值就是**对象**。对象一般通过实例化类创建，方法是使用new关键字并调用构造方法，例子如下：  </div><div class="line">```Point p = new Point(1.0,2.0);</div></pre></td></tr></table></figure></p>
+<h3 id="QUESTION-4-请比较一下Java中引用类型和基本类型的不同？"><a href="#QUESTION-4-请比较一下Java中引用类型和基本类型的不同？" class="headerlink" title="QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？"></a>QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？</h3><p>在Java中，引用类型和对象与基本类型和基本值有着本质的区别。  </p>
 <ol>
 <li>八种基本类型由Java语言定义，程序员不能定义新的基本类型，而引用类型由用户定义，因此可以有无限多个。</li>
 <li>基本类型表示单个值，而引用类型是聚合类型，可以保存零个或多个基本值或对象。</li>
@@ -367,8 +347,7 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">class A &#123;</div><div class="line">	int i = 1;</div><div class="line">	int f() &#123; return i; &#125;</div><div class="line">	static char g() &#123; return &apos;A&apos;; &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class B extends A &#123;</div><div class="line">	int i = 2;</div><div class="line">	int f() &#123; return -i; &#125;</div><div class="line">	static char g() &#123; return &apos;B&apos;; &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static OverrideTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		B b = new B();</div><div class="line">		System.out.println(b.i); //引用B.i, 打印2</div><div class="line">		System.out.println(b.f()); //引用B.f(), 打印-2</div><div class="line">		System.out.println(b.g()); //引用B.g(), 打印B</div><div class="line">		System.out.println(B.g()); //更好的写法</div><div class="line">		A a = (A)b; // 把b矫正成类A的实例</div><div class="line">		System.out.println(b.i); //引用A.i, 打印1</div><div class="line">		System.out.println(b.f()); //引用B.f(), 打印-2</div><div class="line">		System.out.println(b.g()); //引用A.g(), 打印A</div><div class="line">		System.out.println(B.g()); //更好的写法</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>实现方法覆盖这个看起来很神奇的功能背后的机制在于，Javac生成的字节码会在运行时使用“虚拟方法查找(virtual method lookup)”。解释器运行代码时，会查找变量引用对象的真正运行时类型，然后找到适用于这个类型的对应方法。</p>
-<h3 id="QUESTION-7-封装的含义是什么？其意义在于？"><a href="#QUESTION-7-封装的含义是什么？其意义在于？" class="headerlink" title="QUESTION 7: 封装的含义是什么？其意义在于？"></a>QUESTION 7: 封装的含义是什么？其意义在于？</h3><p>简单来说，<strong>封装(encapsulation)</strong>就是把数据隐藏在类中，只能通过方法获取。</p>
-<p>其意义在于以下两点：</p>
+<h3 id="QUESTION-7-封装的含义是什么？其意义在于？"><a href="#QUESTION-7-封装的含义是什么？其意义在于？" class="headerlink" title="QUESTION 7: 封装的含义是什么？其意义在于？"></a>QUESTION 7: 封装的含义是什么？其意义在于？</h3><p>简单来说，<strong>封装(encapsulation)</strong>就是把数据隐藏在类中，只能通过方法获取。<br>其意义在于以下两点：  </p>
 <ol>
 <li>最重要的原因在于，<strong>隐藏类的内部实现细节</strong>，避免让程序员依赖这些细节，从而可以放心的对内部实现细节进行修改而无需担心破坏使用这个类的现有代码。</li>
 <li>另一个原因在于<strong>保护类</strong>，防止因直接操作字段导致类的状态出现前后不一致。</li>
@@ -387,16 +366,14 @@
 <li>不管是否使用static关键字，嵌套的接口、枚举和注解都隐式声明为静态类型。</li>
 </ul>
 </li>
-<li><p><strong>非静态成员类。</strong></p>
-<ul>
+<li><strong>非静态成员类。</strong><ul>
 <li>如果把静态成员类型比作类字段或者类方法，那么非静态成员类可以比作<strong>实例字段或者实例方法</strong>。</li>
 <li>一个非静态成员类的实例始终关联一个外层类型的实例。</li>
 <li>非静态成员类的代码能访问外层类型的所有字段和方法(静态+非静态)。</li>
 <li>非静态成员类不能包含任何静态字段、方法或类型，这是因为静态成员是顶层结构，不和任何特定的对象相关联，而非静态成员类和外层类的实例相关联。在成员类中定义顶层的静态成员会让人困惑，因此禁止这么做。</li>
 </ul>
 </li>
-<li><p><strong>局部类。</strong>必须在一个Java代码块中声明，不是类的成员。和局部变量一样，局部类只在定义它的块中有效。</p>
-<ul>
+<li><strong>局部类。</strong>必须在一个Java代码块中声明，不是类的成员。和局部变量一样，局部类只在定义它的块中有效。<ul>
 <li>局部类能使用同一个作用域的局部变量，方法参数和异常参数，但是这些变量或参数必须声明为final。这是因为，局部类用到的每一个局部变量都有一个私有内部副本(由Javac自动生成)。并且，局部类实例的生命周期可能比定义它的方法执行时间长的多，所以只有把局部变量声明为final才能保证局部变量和私有副本始终保持一致。例子如下：</li>
 </ul>
 </li>
@@ -409,20 +386,15 @@
 </ul>
 </li>
 </ol>
-<h4 id="2-嵌套类型的运作方式"><a href="#2-嵌套类型的运作方式" class="headerlink" title="2.嵌套类型的运作方式"></a>2.嵌套类型的运作方式</h4><p>首先需要确定的是，<strong>引入嵌套类型后，Java虚拟机和Java类文件的格式都没有变化。对Java解释器而言，并没有所谓的嵌套类型，所有类都是普通的顶层类。</strong></p>
-<p>为了实现嵌套类型，javac把每个嵌套类型编译为单独的类文件，得到的其实是顶层类。编译得到的类文件使用特殊的命名约定，如下所示：</p>
+<h4 id="2-嵌套类型的运作方式"><a href="#2-嵌套类型的运作方式" class="headerlink" title="2.嵌套类型的运作方式"></a>2.嵌套类型的运作方式</h4><p>首先需要确定的是，<strong>引入嵌套类型后，Java虚拟机和Java类文件的格式都没有变化。对Java解释器而言，并没有所谓的嵌套类型，所有类都是普通的顶层类。</strong><br>为了实现嵌套类型，javac把每个嵌套类型编译为单独的类文件，得到的其实是顶层类。编译得到的类文件使用特殊的命名约定，如下所示：</p>
 <ul>
 <li>(静态或非静态)成员类型。根据EnclosingType$Member.class格式命名成员类型的类文件。</li>
 <li>匿名类。因为匿名类没有名称，所以由具体的实现细节决定。Oracle/OpenJDK中的javac使用数字表示匿名类的名称(EnclosingType$1.class)。</li>
 <li>局部类。综合使用前两种方式命名(EnclosingType$1Member.class)。</li>
 </ul>
 <p>因为嵌套类型编译成普通的顶层类，所以不能直接访问外层类型中具有特定权限的成员。javac通过在非静态成员类或局部类当中保存外层实例引用的方式，提供了嵌套类所需的合成访问能力。</p>
-<h3 id="QUESTION-9-在Java中，应该使用接口还是抽象类？"><a href="#QUESTION-9-在Java中，应该使用接口还是抽象类？" class="headerlink" title="QUESTION 9: 在Java中，应该使用接口还是抽象类？"></a>QUESTION 9: 在Java中，应该使用接口还是抽象类？</h3><p>Java 8的出现从根本上改变了Java的面向对象编程模型。</p>
-<p>在Java 8之前，接口纯粹是API规范，不包含实现。如果接口有大量实现，往往会导致代码重复。而Java 8中引入了默认方法，显著改变了这一情况。</p>
-<p>一般来说，需要制定API规范时，推荐选择接口。接口中强制方法不是默认方法，因为它们是API的一部分，实现方要提供有效的实现。只有当方法是真正可选的，或者只有一种可能的实现时，才应该使用默认方法。</p>
-<h3 id="QUESTION-10-请介绍并写一下单例模式"><a href="#QUESTION-10-请介绍并写一下单例模式" class="headerlink" title="QUESTION 10: 请介绍并写一下单例模式"></a>QUESTION 10: 请介绍并写一下单例模式</h3><p>单例模式(Singleton Pattern)是用来解决只需要为类创建一个实例这种设计问题。它是最简单的模式之一，一般用于管理配置，现代代码中也经常使用自动为程序员提供单例的框架(一般是<strong>依赖注入</strong>)。</p>
-<p>单例虽然是很实用，但是由于存在有难测试，需考虑多线程等一些问题，要避免过度使用。</p>
-<p>代码如下：</p>
+<h3 id="QUESTION-9-在Java中，应该使用接口还是抽象类？"><a href="#QUESTION-9-在Java中，应该使用接口还是抽象类？" class="headerlink" title="QUESTION 9: 在Java中，应该使用接口还是抽象类？"></a>QUESTION 9: 在Java中，应该使用接口还是抽象类？</h3><p>Java 8的出现从根本上改变了Java的面向对象编程模型。<br>在Java 8之前，接口纯粹是API规范，不包含实现。如果接口有大量实现，往往会导致代码重复。而Java 8中引入了默认方法，显著改变了这一情况。<br>一般来说，需要制定API规范时，推荐选择接口。接口中强制方法不是默认方法，因为它们是API的一部分，实现方要提供有效的实现。只有当方法是真正可选的，或者只有一种可能的实现时，才应该使用默认方法。</p>
+<h3 id="QUESTION-10-请介绍并写一下单例模式"><a href="#QUESTION-10-请介绍并写一下单例模式" class="headerlink" title="QUESTION 10: 请介绍并写一下单例模式"></a>QUESTION 10: 请介绍并写一下单例模式</h3><p>单例模式(Singleton Pattern)是用来解决只需要为类创建一个实例这种设计问题。它是最简单的模式之一，一般用于管理配置，现代代码中也经常使用自动为程序员提供单例的框架(一般是<strong>依赖注入</strong>)。<br>单例虽然是很实用，但是由于存在有难测试，需考虑多线程等一些问题，要避免过度使用。<br>代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line">	private final static Singleton instance = new Singleton();</div><div class="line">	private static boolean initialized = false;</div><div class="line">	</div><div class="line">	private Singleton() &#123;</div><div class="line">		super();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	private void init() &#123;</div><div class="line">		// 做初始化操作</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public static synchronized Singleton getInstance() &#123;</div><div class="line">		if (initialized) return instance;</div><div class="line">		instance.init();</div><div class="line">		initialized = true;</div><div class="line">		return instance;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
 
       
@@ -501,10 +473,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -525,7 +497,7 @@
             <div class="site-state-item site-state-posts">
               <a href="/archives">
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">Artikel</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -563,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#每天十道Java面试题"><span class="nav-number">1.</span> <span class="nav-text">每天十道Java面试题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DAY-1"><span class="nav-number">1.1.</span> <span class="nav-text">DAY 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-1-请简单介绍一下Java这门语言"><span class="nav-number">1.1.1.</span> <span class="nav-text">QUESTION 1: 请简单介绍一下Java这门语言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Java语言是什么？"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1. Java语言是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-JVM是什么？"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2. JVM是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-JVM有哪些特点？"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">3. JVM有哪些特点？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-2-请简单介绍一下Java程序的生命周期？"><span class="nav-number">1.1.2.</span> <span class="nav-text">QUESTION 2: 请简单介绍一下Java程序的生命周期？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-字节码是什么？为什么叫字节码？它真的和设备无关么？"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.字节码是什么？为什么叫字节码？它真的和设备无关么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Javac是编译器么？"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">2.Javac是编译器么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-类文件是怎么加载进虚拟机的？"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">3.类文件是怎么加载进虚拟机的？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-3-请简单介绍一下类和对象的定义？"><span class="nav-number">1.1.3.</span> <span class="nav-text">QUESTION 3: 请简单介绍一下类和对象的定义？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-4-请比较一下Java中引用类型和基本类型的不同？"><span class="nav-number">1.1.4.</span> <span class="nav-text">QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-5-请简单介绍一下Java中字段的修饰符有哪些？"><span class="nav-number">1.1.5.</span> <span class="nav-text">QUESTION 5: 请简单介绍一下Java中字段的修饰符有哪些？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-6-Java中的方法重载和方法覆盖区别是什么？"><span class="nav-number">1.1.6.</span> <span class="nav-text">QUESTION 6: Java中的方法重载和方法覆盖区别是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-7-封装的含义是什么？其意义在于？"><span class="nav-number">1.1.7.</span> <span class="nav-text">QUESTION 7: 封装的含义是什么？其意义在于？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-8-请介绍一下Java中的嵌套类型？"><span class="nav-number">1.1.8.</span> <span class="nav-text">QUESTION 8: 请介绍一下Java中的嵌套类型？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-常见嵌套类型"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">1.常见嵌套类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-嵌套类型的运作方式"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">2.嵌套类型的运作方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-9-在Java中，应该使用接口还是抽象类？"><span class="nav-number">1.1.9.</span> <span class="nav-text">QUESTION 9: 在Java中，应该使用接口还是抽象类？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-10-请介绍并写一下单例模式"><span class="nav-number">1.1.10.</span> <span class="nav-text">QUESTION 10: 请介绍并写一下单例模式</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#每天十道Java面试题"><span class="nav-number">1.</span> <span class="nav-text">每天十道Java面试题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DAY-1"><span class="nav-number">1.1.</span> <span class="nav-text">DAY 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-1-请简单介绍一下Java这门语言"><span class="nav-number">1.1.1.</span> <span class="nav-text">QUESTION 1: 请简单介绍一下Java这门语言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Java语言是什么？"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1. Java语言是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-JVM是什么？"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2. JVM是什么？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-4-请比较一下Java中引用类型和基本类型的不同？"><span class="nav-number">1.1.2.</span> <span class="nav-text">QUESTION 4: 请比较一下Java中引用类型和基本类型的不同？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-5-请简单介绍一下Java中字段的修饰符有哪些？"><span class="nav-number">1.1.3.</span> <span class="nav-text">QUESTION 5: 请简单介绍一下Java中字段的修饰符有哪些？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-6-Java中的方法重载和方法覆盖区别是什么？"><span class="nav-number">1.1.4.</span> <span class="nav-text">QUESTION 6: Java中的方法重载和方法覆盖区别是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-7-封装的含义是什么？其意义在于？"><span class="nav-number">1.1.5.</span> <span class="nav-text">QUESTION 7: 封装的含义是什么？其意义在于？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-8-请介绍一下Java中的嵌套类型？"><span class="nav-number">1.1.6.</span> <span class="nav-text">QUESTION 8: 请介绍一下Java中的嵌套类型？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-常见嵌套类型"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">1.常见嵌套类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-嵌套类型的运作方式"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">2.嵌套类型的运作方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-9-在Java中，应该使用接口还是抽象类？"><span class="nav-number">1.1.7.</span> <span class="nav-text">QUESTION 9: 在Java中，应该使用接口还是抽象类？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUESTION-10-请介绍并写一下单例模式"><span class="nav-number">1.1.8.</span> <span class="nav-text">QUESTION 10: 请介绍并写一下单例模式</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -595,7 +567,7 @@
 
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
