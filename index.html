@@ -327,8 +327,7 @@
       
         
           
-            <h1 id="每天十道Java面试题"><a href="#每天十道Java面试题" class="headerlink" title="每天十道Java面试题"></a>每天十道Java面试题</h1><p>总结自<a href="https://www.tutorialspoint.com/Java/Java_interview_questions.htm" target="_blank" rel="external">tutorialspoint-Java-interview-questions</a>。</p>
-<h2 id="DAY-1"><a href="#DAY-1" class="headerlink" title="DAY 1"></a>DAY 1</h2><h3 id="QUESTION-1-请简单介绍一下Java这门语言"><a href="#QUESTION-1-请简单介绍一下Java这门语言" class="headerlink" title="QUESTION 1: 请简单介绍一下Java这门语言"></a>QUESTION 1: 请简单介绍一下Java这门语言</h3><p>Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。</p>
+            <h1 id="每天十道Java面试题"><a href="#每天十道Java面试题" class="headerlink" title="每天十道Java面试题"></a>每天十道Java面试题</h1><h2 id="DAY-1"><a href="#DAY-1" class="headerlink" title="DAY 1"></a>DAY 1</h2><h3 id="QUESTION-1-请简单介绍一下Java这门语言"><a href="#QUESTION-1-请简单介绍一下Java这门语言" class="headerlink" title="QUESTION 1: 请简单介绍一下Java这门语言"></a>QUESTION 1: 请简单介绍一下Java这门语言</h3><p>Java编程环境出现于20世纪90年代末，由Java语言和运行时构成。运行时也叫Java虚拟机(Java Virtual Machine，JVM)。</p>
 <h4 id="1-Java语言是什么？"><a href="#1-Java语言是什么？" class="headerlink" title="1. Java语言是什么？"></a>1. Java语言是什么？</h4><p>Java语言即Java程序的源码，是人类可读的编程语言，基于类，面向对象，并且比较易读易写。其受Java语言规范(Java Language Specification，JLS)的约束。</p>
 <h4 id="2-JVM是什么？"><a href="#2-JVM是什么？" class="headerlink" title="2. JVM是什么？"></a>2. JVM是什么？</h4><p>JVM是一个程序，提供了运行Java程序所需的运行时环境。如果某个硬件和操作系统平台没有相应的JVM，就不能运行Java程序。</p>
 <p>我们熟知的命令：</p>
@@ -339,7 +338,7 @@
 <li>较之C和C++的方式，JVM提供了一个相对<strong>安全的执行环境</strong>，它代替开发者<strong>管理内存</strong>，并且提供了一个<strong>跨平台</strong>的执行环境。</li>
 <li>另外一个很少被提及的特点是，JVM可以<strong>使用运行时信息进行自我管理</strong>(可能是真正意义上第一个具有这种特性的主流开发平台)。JVM会收集程序运行时的信息，并对如何执行代码做出更好的决定。(比如HotSpot JVM，就能够识别出程序中的“热点方法”，然后跳过JVM解释器，直接把这一部分编译成机器码，这是通过一种叫JIT编译(Just-In-Time compilation)的技术实现的)。</li>
 </ol>
-<h3 id="QUESTION2-2-请简单介绍一下Java程序的生命周期？"><a href="#QUESTION2-2-请简单介绍一下Java程序的生命周期？" class="headerlink" title="QUESTION2 2: 请简单介绍一下Java程序的生命周期？"></a>QUESTION2 2: 请简单介绍一下Java程序的生命周期？</h3><p>下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。</p>
+<h3 id="QUESTION-2-请简单介绍一下Java程序的生命周期？"><a href="#QUESTION-2-请简单介绍一下Java程序的生命周期？" class="headerlink" title="QUESTION 2: 请简单介绍一下Java程序的生命周期？"></a>QUESTION 2: 请简单介绍一下Java程序的生命周期？</h3><p>下面的这张图摘选自《Java技术手册(第六版)》，简要的说明看Java程序的生命周期。</p>
 <p><img src="img/Java_program_life_cycle.png" alt="Java Program Life Cycle"></p>
 <p>整个流程从Java源码开始，经过Javac程序处理后得到类文件(.class)，类文件中保存的是编译之后的Java字节码，同时它也是Java平台能够处理的最小功能单位，是把新代码传递给运行中程序的唯一方式。</p>
 <p>那么这里又引出来一些新的问题：</p>
