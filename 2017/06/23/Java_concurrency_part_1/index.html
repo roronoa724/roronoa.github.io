@@ -1,0 +1,735 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Java concurrency," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引言随着多线程应用开发与日俱增的复杂性，许多开发者发现Java的底层并发机制已经不能够满足他们的需求。在这种情况下，是时候对java.util.concurrent包提供的功能进行全面的探索了。这其中包括Executor框架，Synchronizer类型，以及Java并发集合等等。Java平台提供了底层的并发编程功能，能够为开发者提供多线程同步执行的能力。标准的Java多线程是存在一些缺陷的，比如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程-Part 1">
+<meta property="og:url" content="http://roronoa.space/2017/06/23/Java_concurrency_part_1/index.html">
+<meta property="og:site_name" content="roronoa space">
+<meta property="og:description" content="引言随着多线程应用开发与日俱增的复杂性，许多开发者发现Java的底层并发机制已经不能够满足他们的需求。在这种情况下，是时候对java.util.concurrent包提供的功能进行全面的探索了。这其中包括Executor框架，Synchronizer类型，以及Java并发集合等等。Java平台提供了底层的并发编程功能，能够为开发者提供多线程同步执行的能力。标准的Java多线程是存在一些缺陷的，比如">
+<meta property="og:updated_time" content="2017-06-24T13:37:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发编程-Part 1">
+<meta name="twitter:description" content="引言随着多线程应用开发与日俱增的复杂性，许多开发者发现Java的底层并发机制已经不能够满足他们的需求。在这种情况下，是时候对java.util.concurrent包提供的功能进行全面的探索了。这其中包括Executor框架，Synchronizer类型，以及Java并发集合等等。Java平台提供了底层的并发编程功能，能够为开发者提供多线程同步执行的能力。标准的Java多线程是存在一些缺陷的，比如">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://roronoa.space/2017/06/23/Java_concurrency_part_1/"/>
+
+
+
+
+
+  <title> Java并发编程-Part 1 | roronoa space </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">roronoa space</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">three thousand worlds</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/06/23/Java_concurrency_part_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="roronoa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="roronoa space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java并发编程-Part 1
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-23T20:02:00+08:00">
+                2017-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>随着多线程应用开发与日俱增的复杂性，许多开发者发现Java的底层并发机制已经不能够满足他们的需求。在这种情况下，是时候对java.util.concurrent包提供的功能进行全面的探索了。这其中包括Executor框架，Synchronizer类型，以及Java并发集合等等。<br>Java平台提供了底层的并发编程功能，能够为开发者提供多线程同步执行的能力。标准的Java多线程是存在一些缺陷的，比如：  </p>
+<ol>
+<li>Java底层的并发原语(<font color="#800000">synchronized</font>,<font color="#800000">volatile</font>, <font color="#800000">wait()</font>, <font color="#800000">notify()</font>, 和<font color="#800000">notifyAll()</font>)很难被正确的使用。因为错误使用这些原语导致出现的一些如线程死锁，线程饥饿，竞态等问题，也很难复现和排查。</li>
+<li>多线程同步访问公共资源很容易成为应用性能的瓶颈点，影响应用的可扩展性，而这往往是许多现代应用的刚需。</li>
+<li>Java提供的基础多线程编程功能太过于底层，开发者往往需要使用更高层次的抽象比如信号量和线程池，然而这些Java底层并没有提供。由此而引发的就是开发者需要自行构建上述抽象，而这往往十分浪费时间并且容易出现问题。</li>
+</ol>
+<p>正因为以上这些问题，<a href="https://www.jcp.org/en/jsr/detail?id=166" target="_blank" rel="external">JSR 166: Concurrency Utilities framework</a>在2002年被首次提出了，其设计的目的是用来为开发者提供高层次的并发编程能力。2年后也就是2004年，该框架在Java 5中被正式实现，并且在后续的版本中进行了逐步的完善。<br>本系列文章的目的是向开发者介绍Java Concurrency Utilities中的内容。在第一部分，会首先对该并发框架进行一个概览，并对Executor框架，synchronizer工具包，以及Java并发集合(Concurrent Collections)进行介绍。</p>
+<h2 id="走进Java-Concurrency-Utilities"><a href="#走进Java-Concurrency-Utilities" class="headerlink" title="走进Java Concurrency Utilities"></a>走进Java Concurrency Utilities</h2><p><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/concurrency/" target="_blank" rel="external">Java Concurrency Utilities framework</a>是由一些专门设计用来构造多线程并发程序的<a href="http://www.javaworld.com/article/2074906/core-java/thanks-type-and-gentle-class.html" target="_blank" rel="external">类</a>所组成的。框架中所有的类都是线程安全的，并且都经过完善的测试，能够保障高性能。<br>Java Concurrency Utilities中的类型被组织成几个小的框架，从包命名上可以区分为Executor framework, synchronizer, concurrent collections, locks, atomic variables和Fork/Join。它们进一步又被细分为一个主package和一系列子package：</p>
+<ul>
+<li><strong>java.util.concurrent</strong>包含一些在并发编程中常用的工具类。例子包括semaphores, barriers, thread pools和concurrent hashmaps。  <ul>
+<li><strong>java.util.concurrent.atomic</strong>包含一些底层的并发工具类，能够支持单变量的无锁化线程安全机制。</li>
+<li><strong>java.util.concurrent.locks</strong>提供了一些不同于底层synchronization和monitors的加锁和临界区资源等待的工具类。</li>
+</ul>
+</li>
+</ul>
+<p>Java Concurrency Utilities框架同时也暴露了底层的compare-and-swap (CAS)硬件指令，其变体能够被大多数现代处理器所支持。CAS同时比基于Java monitor的同步机制更加轻量级，能够用来实现一些可以高度可扩展的并发工具类。基于CAS的<font color="#800000">java.util.concurrent.locks.ReentrantLock</font>类(可重入锁)，能够获得比<font color="#800000">synchronized</font>更好的性能。ReentrantLock同时能够提供更为可控的加锁机制。(在第二部分我会更为详细的讲解CAS是如何在<font color="#800000">java.util.concurrent</font>当中工作的)。</p>
+<blockquote>
+<p><strong>System.nanoTime()</strong></p>
+<p>Java Concurrency Utilities框架包含返回long类型时间戳的<font color="#800000">nanoTime()</font>方法。这个方法能够保证纳秒级别的精度，可以用来做时间测定。</p>
+</blockquote>
+<p>在下面的几个部分中，我将依次介绍Java Concurrency Utilities中的三个实用特性。首先会解释为什么这些特性对现代并发编程如此重要，之后会演示这些工具类是如何工作的，是如何提升Java并发程序的运行速度，可靠性，工作效率和可扩展性的。  </p>
+<h3 id="The-Executor-framework"><a href="#The-Executor-framework" class="headerlink" title="The Executor framework"></a>The Executor framework</h3><p>In threading, a task is a unit of work. One problem with low-level threading in Java is that task submission is tightly coupled with a task-execution policy, as demonstrated by Listing 1.<br>在多线程编程中，我们将task称为一个工作单元。Java底层并发机制的问题在于task的提交与task的执行是强相关的，就如下面这段代码所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">import java.io.IOException;</div><div class="line">import java.net.ServerSocket;</div><div class="line">import java.net.Socket;</div><div class="line"></div><div class="line">public class Server &#123;</div><div class="line">    public static void main(String[] args) throws IOException &#123;</div><div class="line">        ServerSocket serverSocket = new ServerSocket(9000);</div><div class="line">        while (true) &#123;</div><div class="line">            final Socket socket = serverSocket.accept();</div><div class="line">            Runnable r = new Runnable() &#123;</div><div class="line">                public void run() &#123;</div><div class="line">                    doWork(socket);</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">            new Thread(r).start();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static void doWork(Socket socket) &#123;</div><div class="line">        // do some work with socket</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这段代码描述了一个简单的服务器应用是如何运行的。服务器线程在一个死循环当中重复的在指定端口上调用<font color="#800000">socket.accept()</font>方法(注意该方法是阻塞式的)来接收客户端发送过来的请求，在接收到请求之后，服务器会启动一个线程来对该请求做进一步的处理。<br>因为示例代码中的应用为每一个请求都会新建一个线程来处理，当有大量请求到达服务器时，其无法对线程数目进行控制。由于每个创建出来的线程都会占用一定的内存，过多的线程会耗尽系统的可用内存，使应用异常终止。<br>上述问题可以通过改变task的执行策略来解决。相比于每次请求都新建一个线程来处理，使用线程池往往被认为是更好的方式。对于接受到的请求，线程池能够控制固定数目的线程来处理，避免了线程无限增长的情况。之后我们会使用<font color="#800000">java.util.concurrent</font>中提供的工具类来重写上面这段代码。  </p>
+<p><font color="#800000">java.util.concurrent</font>包中包含了<a href="http://www.javaworld.com/article/2071822/java-concurrency/book-excerpt--executing-tasks-in-threads.html" target="_blank" rel="external">Executor framework</a>，一个专门用来解耦任务提交和任务执行策略的框架。利用该包提供的功能，我们可以十分方便的调整程序的任务执行策略，并且只需要对代码进行一些细微的改动。</p>
+<h3 id="Inside-the-Executor-framework"><a href="#Inside-the-Executor-framework" class="headerlink" title="Inside the Executor framework"></a>Inside the Executor framework</h3><p>Executor framework基于<font color="#800000">Executor</font>接口，实现该接口的类被认为有能力执行<font color="#800000">java.lang.Runnable</font>任务。其中仅仅提供了一个需要实现的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * Executes the given command at some time in the future.  The command</div><div class="line">     * may execute in a new thread, in a pooled thread, or in the calling</div><div class="line">     * thread, at the discretion of the &#123;@code Executor&#125; implementation.</div><div class="line">     *</div><div class="line">     * @param command the runnable task</div><div class="line">     * @throws RejectedExecutionException if this task cannot be</div><div class="line">     * accepted for execution</div><div class="line">     * @throws NullPointerException if command is null</div><div class="line">     */</div><div class="line">    void execute(Runnable command);</div></pre></td></tr></table></figure>
+<p>提交一个Runnable任务的方式就是将其作为参数传入execute方法。如果executor由于一些原因不能执行任务(比如已经shut down了)，那么该方法会抛出一个<font color="#800000">RejectedExecutionException</font>异常。<br>Executor接口定义的关键点在于任务提交和任务执行策略的解耦。解耦之后Runnable任务能够根据开发者的需求实现多种执行策略，比如新建一个线程，使用线程池，或者使用Callable(后续会介绍)等等。<br>注意，仅仅定义一个Executor接口是非常有局限性的。你不能终止一个executor的运行，不能判断一个异步任务是否执行结束，同时你也不能取消一个正在运行的任务。基于以上几点缺陷，Executor framework另外提供了一个<font color="#800000">ExecutorService</font>接口，它是继承自Executor接口的。<br>在ExecutorService提供的方法中，有下面五个值得注意的：</p>
+<ul>
+<li><strong>boolean awaitTermination(long timeout, TimeUnit unit)</strong>三种情况会使Executor阻塞工作线程直到所有的任务都执行完毕，分别是shutdown请求发出，达到终止超时时间，或者当前线程被中断。其中等待终止的最大超时时间是由timeout参数指定的，该参数的单位由第二个unit参数指定，时间单位使用TimeUnit枚举，比如TimeUnit.SECONDS表示秒。如果当前线程被中断，那么该方法会抛出java.lang.InterruptedException异常。当等待超过设定时间时，会监测ExecutorService是否已经关闭，若关闭则返回true，否则返回false。一般情况下会和shutdown方法组合使用。</li>
+<li><strong>boolean isShutdown()</strong>返回Executor是否已经关闭。</li>
+<li><strong>void shutdown()</strong>平滑的关闭ExecutorService，当此方法被调用时，ExecutorService停止接收新的任务并且等待已经提交的任务（包含提交正在执行和提交未执行）执行完成。当所有提交任务执行完毕，线程池即被关闭。</li>
+<li><strong>\<t> Future\<t> submit(Callable\<t> task)</t></t></t></strong>提交一个可返回结果的task。该方法的返回值是一个Future类型，Future\<v>接口提供了表示异步任务返回结果的方式。结果要以”future”命名是因为直到未来的某一刻结果才是有效的。它可以对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果、设置结果操作。Callable\<v>接口和Runnable接口比较类似，同样提供了一个描述任务执行的方法，区别在于其call方法可以返回结果，也会抛出异常。</v></v></li>
+<li><strong>Future\&lt;?&gt; submit(Runnable task)</strong>提交一个Runnable任务并返回对应的Future。</li>
+</ul>
+<h3 id="Executor-factory-methods"><a href="#Executor-factory-methods" class="headerlink" title="Executor factory methods"></a>Executor factory methods</h3><p>终于讲到如何来创建一个Executor了。Executor framework提供了Executors工具类来创建Executor。它包含多种工厂方法来获取不同种类的Executor，每种Executor都有自己独特的线程执行策略。常用的三个例子如下：  </p>
+<ul>
+<li><strong>ExecutorService newCachedThreadPool()</strong>提供能够按需创建线程的线程池，但是可以重用之前创建的线程。60秒没有被使用过的线程会被终止并从池中删除。该线程池的使用场景是：包含大量短生命周期异步任务的应用。</li>
+<li><strong>ExecutorService newSingleThreadExecutor()</strong>创建出的Executor仅仅包含一个工作线程，同时该线程会操作一个无界的任务队列 – 任务被添加到队列之中并被工作线程顺序的执行(在同一时刻只有且仅有一个任务处于活跃状态)。如果在Executor运行期间该唯一的工作线程异常终止，则会重新创建一个新的工作线程。</li>
+<li><strong>ExecutorService newFixedThreadPool(int nThreads)</strong>创建一个重用固定数目线程的线程池，这些线程共享一个无界的任务队列。 该线程池的特点是最多只会有n个活跃线程处理任务。如果有任务到达但是所有的工作线程都处于活跃状态，那么会进入任务队列等待，直到有工作线程空闲。同SingleThreadExecutor，如果有线程异常终止，会新创建一个线程顶替。</li>
+</ul>
+<p>Executor framework还提供了如ScheduledExecutorService等多种类型的工具类, 但是开发过程中最常用到的就是ExecutorService, Future, Callable和Executors。</p>
+<h3 id="Working-with-the-Executor-framework"><a href="#Working-with-the-Executor-framework" class="headerlink" title="Working with the Executor framework"></a>Working with the Executor framework</h3><p>你会发现Executor framework十分易于使用。在下面这段代码中，我们使用Executor和Executors对之前的Server例子进行了重写。使用线程池，提供了更好的可扩展性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">import java.io.IOException;</div><div class="line">import java.net.ServerSocket;</div><div class="line">import java.net.Socket;</div><div class="line">import java.util.concurrent.Executor;</div><div class="line">import java.util.concurrent.Executors;</div><div class="line"></div><div class="line">public class ImproveServer &#123;</div><div class="line"></div><div class="line">    static Executor pool = Executors.newFixedThreadPool(5);</div><div class="line"></div><div class="line">    public static void main(String[] args) throws IOException &#123;</div><div class="line">        ServerSocket serverSocket = new ServerSocket(9000);</div><div class="line">        while (true) &#123;</div><div class="line">            final Socket socket = serverSocket.accept();</div><div class="line">            Runnable r = new Runnable() &#123;</div><div class="line">                public void run() &#123;</div><div class="line">                    doWork(socket);</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">            pool.execute(r);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static void doWork(Socket socket) &#123;</div><div class="line">        // do some work with socket</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上段代码中使用newFixedThreadPool(int)创建了一个包含五个固定工作线程的线程池。同时也使用pool.execute(r)替换了new Thread(r).start()，来让线程池中的工作线程处理服务器收到的请求。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java-concurrency/" rel="tag"># Java concurrency</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/21/每天十道JAVA面试题-DAY1/" rel="next" title="每天十道Java面试题-DAY1">
+                <i class="fa fa-chevron-left"></i> 每天十道Java面试题-DAY1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="roronoa" />
+          <p class="site-author-name" itemprop="name">roronoa</p>
+           
+              <p class="site-description motion-element" itemprop="description">you cannot win with a losing hand</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#走进Java-Concurrency-Utilities"><span class="nav-number">2.</span> <span class="nav-text">走进Java Concurrency Utilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Executor-framework"><span class="nav-number">2.1.</span> <span class="nav-text">The Executor framework</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inside-the-Executor-framework"><span class="nav-number">2.2.</span> <span class="nav-text">Inside the Executor framework</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Executor-factory-methods"><span class="nav-number">2.3.</span> <span class="nav-text">Executor factory methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Working-with-the-Executor-framework"><span class="nav-number">2.4.</span> <span class="nav-text">Working with the Executor framework</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roronoa</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
