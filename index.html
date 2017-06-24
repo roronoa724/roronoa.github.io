@@ -371,8 +371,8 @@
 <li><strong>boolean awaitTermination(long timeout, TimeUnit unit)</strong>三种情况会使Executor阻塞工作线程直到所有的任务都执行完毕，分别是shutdown请求发出，达到终止超时时间，或者当前线程被中断。其中等待终止的最大超时时间是由timeout参数指定的，该参数的单位由第二个unit参数指定，时间单位使用TimeUnit枚举，比如TimeUnit.SECONDS表示秒。如果当前线程被中断，那么该方法会抛出java.lang.InterruptedException异常。当等待超过设定时间时，会监测ExecutorService是否已经关闭，若关闭则返回true，否则返回false。一般情况下会和shutdown方法组合使用。</li>
 <li><strong>boolean isShutdown()</strong>返回Executor是否已经关闭。</li>
 <li><strong>void shutdown()</strong>平滑的关闭ExecutorService，当此方法被调用时，ExecutorService停止接收新的任务并且等待已经提交的任务（包含提交正在执行和提交未执行）执行完成。当所有提交任务执行完毕，线程池即被关闭。</li>
-<li><strong>\<t> Future\<t> submit(Callable\<t> task)</t></t></t></strong>提交一个可返回结果的task。该方法的返回值是一个Future类型，Future\<v>接口提供了表示异步任务返回结果的方式。结果要以”future”命名是因为直到未来的某一刻结果才是有效的。它可以对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果、设置结果操作。Callable\<v>接口和Runnable接口比较类似，同样提供了一个描述任务执行的方法，区别在于其call方法可以返回结果，也会抛出异常。</v></v></li>
-<li><strong>Future\&lt;?&gt; submit(Runnable task)</strong>提交一个Runnable任务并返回对应的Future。</li>
+<li><strong>\<t\> Future\<t\> submit(Callable\<t\> task)</t\></t\></t\></strong>提交一个可返回结果的task。该方法的返回值是一个Future类型，Future\<v>接口提供了表示异步任务返回结果的方式。结果要以”future”命名是因为直到未来的某一刻结果才是有效的。它可以对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果、设置结果操作。Callable\<v>接口和Runnable接口比较类似，同样提供了一个描述任务执行的方法，区别在于其call方法可以返回结果，也会抛出异常。</v></v></li>
+<li><strong>Future\&lt;?> submit(Runnable task)</strong>提交一个Runnable任务并返回对应的Future。</li>
 </ul>
 <h3 id="Executor-factory-methods"><a href="#Executor-factory-methods" class="headerlink" title="Executor factory methods"></a>Executor factory methods</h3><p>终于讲到如何来创建一个Executor了。Executor framework提供了Executors工具类来创建Executor。它包含多种工厂方法来获取不同种类的Executor，每种Executor都有自己独特的线程执行策略。常用的三个例子如下：  </p>
 <ul>
