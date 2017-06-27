@@ -95,7 +95,7 @@ Semaphores(">
 <meta property="og:site_name" content="roronoa space">
 <meta property="og:description" content="Synchronizers(同步器)是用来调整和控制线程执行逻辑的类。Java Concurrency Utilities framework提供了其多种实现包括semaphore, cyclic barrier, countdown latch, exchanger和phaser synchronizers. 下面我将对每种同步器的功能进行介绍并演示在代码中是如何使用的。
 Semaphores(">
-<meta property="og:updated_time" content="2017-06-27T14:52:01.000Z">
+<meta property="og:updated_time" content="2017-06-27T14:58:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java高级并发编程-Synchronizers">
 <meta name="twitter:description" content="Synchronizers(同步器)是用来调整和控制线程执行逻辑的类。Java Concurrency Utilities framework提供了其多种实现包括semaphore, cyclic barrier, countdown latch, exchanger和phaser synchronizers. 下面我将对每种同步器的功能进行介绍并演示在代码中是如何使用的。
@@ -367,8 +367,7 @@ Semaphores(">
 <p>代码的执行结果如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">pool-1-thread-1 about to join game...</div><div class="line">pool-3-thread-1 about to join game...</div><div class="line">pool-2-thread-1 about to join game...</div><div class="line">Thread pool-2-thread-1 executing barrier action.</div><div class="line">pool-2-thread-1 has joined game</div><div class="line">pool-3-thread-1 has joined game</div><div class="line">pool-1-thread-1 has joined game</div></pre></td></tr></table></figure>
 <p>从执行结果中可以看出，游戏的三个参与者，pool-1-thread-1和pool-3-thread-1首先加入游戏，但因为此时并未达到barrier指定的参与数，所以在调用<font color="#800000">barrier.await()</font>会阻塞住。直到参与者pool-2-thread-1加入游戏后才会继续执行。同时，当最后一个参与者进入游戏后，指定的action操作会被触发。</p>
-<h2 id="Countdown-latches-计数器"><a href="#Countdown-latches-计数器" class="headerlink" title="Countdown latches(计数器)"></a>Countdown latches(计数器)</h2><p><em>Countdown latch</em>是一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。  </p>
-<p><font color="#800000">java.util.concurrent.CountDownLatch</font>提供一个包含初始计数的构造器<font color="#800000">CountDownLatch(int count)</font>。在当前计数到达零之前，调用其<font color="#800000">await()</font>方法会一直受阻塞。之后，会释放所有等待的线程，<font color="#800000">await()</font>的所有后续调用都将立即返回。<br>CountDownLatch有很多用途。可以将计数1初始化的CountDownLatch用作一个简单的开/关锁存器，或入口：在通过调用<font color="#800000">countDown()</font>的线程打开入口前，所有调用<font color="#800000">await()</font>的线程都一直在入口处等待。用N初始化的 CountDownLatch可以使一个线程在 N 个线程完成某项操作之前一直等待，或者使其在某项操作完成N次之前一直等待。</p>
+<h2 id="Countdown-latches-计数器"><a href="#Countdown-latches-计数器" class="headerlink" title="Countdown latches(计数器)"></a>Countdown latches(计数器)</h2><p><em>Countdown latch</em>是一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。<br>类<font color="#800000">java.util.concurrent.CountDownLatch</font>提供一个包含初始计数的构造器<font color="#800000">CountDownLatch(int count)</font>。在当前计数到达零之前，调用其<font color="#800000">await()</font>方法会一直受阻塞。之后，会释放所有等待的线程，<font color="#800000">await()</font>的所有后续调用都将立即返回。<br>CountDownLatch有很多用途。可以将计数1初始化的CountDownLatch用作一个简单的开/关锁存器，或入口：在通过调用<font color="#800000">countDown()</font>的线程打开入口前，所有调用<font color="#800000">await()</font>的线程都一直在入口处等待。用N初始化的 CountDownLatch可以使一个线程在 N 个线程完成某项操作之前一直等待，或者使其在某项操作完成N次之前一直等待。</p>
 <h3 id="Working-with-countdown-latches"><a href="#Working-with-countdown-latches" class="headerlink" title="Working with countdown latches"></a>Working with countdown latches</h3><p>Countdown latches决定了其十分适合用来做任务分解，步骤如下：  </p>
 <ul>
 <li>主线程创建一个计数为1的countdown latch(不妨称之为startLatch)作为一个开关锁存器，用来同时启动一组工作线程。</li>
