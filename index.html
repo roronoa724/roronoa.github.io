@@ -240,6 +240,170 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/02/operating_system_process/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="roronoa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="roronoa space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/02/operating_system_process/" itemprop="url">
+                  关于操作系统我们应该知道些什么？--进程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-02T18:05:00+08:00">
+                2017-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operating-System/" itemprop="url" rel="index">
+                    <span itemprop="name">Operating System</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="What-is-process"><a href="#What-is-process" class="headerlink" title="What is process?"></a>What is process?</h2><p>最简单的定义：<strong><em>进程(Process)</em></strong>是<strong>程序(Application)</strong>的一次运行实例(Instance of an executing program)。所以进程有时也被称为任务(<font color="#800080">task</font>  or <font color="#800080">job</font>)。<br>操作系统的功能之一是代表上层应用访问和管理底层硬件。而这里所指的应用，仅表示保存在某处(硬盘，闪存，甚至是云)的程序代码，是一个<strong>静态实体(static entity)</strong>，如下图所示:<br><img src="/images/process1.png" alt="static program entity"><br>当应用的程序代码被加载到内存，开始运行时，就生成了一个进程，所以进程是一个<strong>动态实体(active entity)</strong>。如果相同的应用被运行多次，那么就会对应的生成多个进程。每个进程都会执行相同的程序代码，但是运行状态各有不同，这进一步印证了进程是程序的一次运行实例。如下图所示：<br><img src="/images/process2.png" alt="active process entity">  </p>
+<h2 id="What-does-a-process-look-like"><a href="#What-does-a-process-look-like" class="headerlink" title="What does a process look like?"></a>What does a process look like?</h2><p><img src="/images/process3.png" alt="process-structure">  </p>
+<ul>
+<li><em>text</em> : 程序代码。</li>
+<li><em>data</em> : 进程第一次初始化时的有效数据。<br>text和data是进程首次加载时的静态状态，在运行之前就可以确定。</li>
+<li><em>heap</em> : 运行时动态分配的内存空间(<strong>堆内存</strong>)。</li>
+<li><em>special area</em> : 不允许进程访问的内存空间。</li>
+<li><em>stack</em> : 以LIFO(后进先出，Last In First Out)规则管理的内存空间(<strong>栈内存</strong>)。可用来在执行过程切换时保存和恢复现场。</li>
+</ul>
+<p>进程占用的内存被称为<em>地址空间(address space)</em>。然而机器的内存大小总归是有限的，进程太多会导致物理内存空间不够用。并且让进程直接面向物理内存地址进行操作比较复杂，不同进程间地址空间的隔离性很差。为了避免这些问题，当处理器读或写入内存位置时，会使用<strong>虚拟地址(Virtual Address)</strong>，作为读或写操作的一部分，处理器同时会将虚拟地址转换为物理地址。这个转换往往是通过<strong>分页(Page)</strong>机制并配合一些策略来实现的。关于虚拟地址和内存管理的内容会在后续的博客中进行介绍，这里先有个大致印象。整体的映射关系可以见下图：<br><img src="/images/process4.png" alt="process-structure">  </p>
+<h2 id="How-does-the-OS-know-what-a-process-is-doing"><a href="#How-does-the-OS-know-what-a-process-is-doing" class="headerlink" title="How does the OS know what a process is doing?"></a>How does the OS know what a process is doing?</h2><h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>由于每个应用程序都是运行在某个进程的<em>上下文(Context)</em>中的。上下文是由程序正确运行所需的状态做成的。结合上文提到的进程占用内存空间的结构来看，这个状态包含存放在存储器中的程序的代码和数据，它的栈，通用目的寄存器的内容、程序计数器(PC,Program Counter)、环境变量以及打开文件描述符的集合等等。这些信息在操作系统中被一个称作<em>进程控制块(PCB,Process Control Block)</em>的结构体来统一管理，其结构如下图所示：<br><img src="/images/process5.png" alt="process-structure"><br>PCB在进程创建并初始化的时候会生成。操作系统根据PCB来获知当前进程的运行状态，进而用于进程切换时保存和恢复现场。</p>
+<h3 id="How-is-a-PCB-used"><a href="#How-is-a-PCB-used" class="headerlink" title="How is a PCB used?"></a>How is a PCB used?</h3><p><img src="/images/process6.png" alt="process-structure"><br>在上图中可以看出，两个进程P1和P2在运行过程中都会载入自身的PCB。在进程执行的某些时刻，内核可以决定抢占当前进程，并重新开始一个先前被抢占的进程。这种决定就叫做<em>调度(schedule)</em>，是由内核中称为<em>调度器(scheduler)</em>的代码处理的，关于调度的问题这里不展开来谈。在内核调度了一个新的进程运行后，它就抢占当前进程，使用一种称作<em>上下文切换(Context Switch)</em>的机制来将控制转移到新的进程(实际上就是PCB信息的切换)，它包括：</p>
+<ol>
+<li>保存当前进程的上下文。</li>
+<li>恢复某个先前被强占的进程被保存的上下文。</li>
+<li>将控制传递给这个新恢复的进程。</li>
+</ol>
+<p>上下文切换是一种十分昂贵的操作，原因有下面两点。</p>
+<ul>
+<li>保存被抢占进程的PCB现场，并重新从抢占进程的PCB中恢复信息到内存和寄存器，这种save和load操作本身就会增加耗时。</li>
+<li>间接影响是上下文切换会导致CPU的<em>高速缓存污染(Cache pollution)</em>。对于新的进程而言，上一个进程在CPU高速缓存中保存的信息是无效的。我们通常称这个时候高速缓存的状态会由<strong>hot</strong>变为<strong>cold</strong>，必须再次预热。由于CPU高速缓存的速度要成倍优于内存，所以频繁的上下文切换将会极大影响进程的执行效率。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/06/25/Java_concurrency_part_1_synchronizers/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -891,7 +1055,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -902,7 +1066,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -913,7 +1077,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
