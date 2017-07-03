@@ -240,6 +240,172 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/03/hexo-imgbed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="roronoa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="roronoa space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/03/hexo-imgbed/" itemprop="url">
+                  使用七牛云搭建Hexo博客图床
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-03T22:26:00+08:00">
+                2017-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">Hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>转载自http://www.jianshu.com/p/ec2c8acf63cd
+</code></pre><p>今天一打开blog发现一个重大问题，所有文章中的图片全挂了，Hexo文章中的图片，可以放在本地，然后和静态文件一起发布（部署）到空间里，原来就是这么做的。<br>经过后来的仔细想想，我觉得文章中以前一直都是用的本地图片，如果有一天我电脑不用了，或者转移或者在出现这种情况，每个图片不是还得重弄嘛，太费劲了，之前搭建博客的时候，看到了用七牛云存储来托管图片，这下迁移数据，加载什么的烦恼，都忘掉！！接下来，由此困扰的同学，可以直接看完。看完你会从建立账号到使用图片外链的技能，基础操作只需要这一篇博客就够用了。</p>
+<h2 id="七牛简介"><a href="#七牛简介" class="headerlink" title="七牛简介"></a>七牛简介</h2><p>七牛云，在这里您可以方便快捷的访问您在七牛云中使用的各类资源，通过简单操作便可以完成对相关资源的配置监控和管理。<br>一句话，我就是用它做图片托管，取外链写在文章中。OK。  </p>
+<h2 id="菜鸟阶段"><a href="#菜鸟阶段" class="headerlink" title="菜鸟阶段"></a>菜鸟阶段</h2><h3 id="初阶-注册与初识"><a href="#初阶-注册与初识" class="headerlink" title="初阶:注册与初识"></a>初阶:注册与初识</h3><p>首先需要申请七牛账号，访问<a href="https://portal.qiniu.com/signup?code=3ljtpdxtk87yq" target="_blank" rel="external">七牛云官网</a>，进到下面这个页面，里面有多种服务，当然你们需要可以自行解决需求，今天我们只讲图片要用到的。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/hexo-imgbed1.png" alt="hexo-imgbed1"><br>看到图片中的服务了吧，现在只需要点击对象存储这个就可以创建空间了，然后在里面选择配置吧。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/hexo-imgbed2.png" alt="hexo-imgbed2"><br>亲测没什么大碍，上面说“ 华北区域尚未支持自定义数据处理服务，一旦创建区域无法修改，请谨慎选择。 ”所以默默选择了华东，然后控制是我选的是公开的，私有的获取外链方式不一样后续介绍。好了，恭喜你，你已经完成了菜鸟任务。  </p>
+<h2 id="中鸟阶段"><a href="#中鸟阶段" class="headerlink" title="中鸟阶段"></a>中鸟阶段</h2><h3 id="进阶-使用与相识"><a href="#进阶-使用与相识" class="headerlink" title="进阶:使用与相识"></a>进阶:使用与相识</h3><p>接下来，我们该使用强大的服务了。在内容管理中找到上传文件。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/hexo-imgbed3.png" alt="hexo-imgbed3">  </p>
+<p><img src="http://osio2xhqh.bkt.clouddn.com/image/png/hexo-imgbed4.png" alt="hexo-imgbed4"><br>然后就会进到上传的页面，选择文件，接下来都会啦。然后关闭后，回到了文件上传列表界面。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/hexo-imgbed5.png" alt="hexo-imgbed5"><br>后面的复制外链点击后就可以了，然后回到md文件中只要写上图片语法就可以引用了。  </p>
+<pre><code>![自己定义的图片名字](复制过来的外链）
+</code></pre><p>这里注意还有一种<strong>高级用法</strong>，有时我们自己使用截图软件对自己在visio或者OminiGraffle上画的图截图并嵌入到markdown里面后，在网页里面往往会出现展示过大的情况。笔者就曾经被这个问题弄得无比头大，每次写博客都重新压一次图简直要死。好在七牛为我们提供了一个十分便捷的功能。可以参考下面两个链接：<br><a href="https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2" target="_blank" rel="external">图片基本处理</a><br><a href="https://developer.qiniu.com/dora/manual/1270/the-advanced-treatment-of-images-imagemogr2" target="_blank" rel="external">图片高级处理</a><br>通常的操作是对图片按原有比例进行缩放，我们有下面这样一张图片：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process1.png" alt="process1"><br>在markdown中的写法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![process1](http://osio2xhqh.bkt.clouddn.com/image/png/process1.png)</div></pre></td></tr></table></figure></p>
+<p>下面使用七牛云的API对引用方式进行修改，添加缩放50%参数如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![process1-thumb](http://osio2xhqh.bkt.clouddn.com/image/png/process1.png?imageMogr2/thumbnail/!50p)</div></pre></td></tr></table></figure></p>
+<p>这时展示效果如下所示：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process1.png?imageMogr2/thumbnail/!50p" alt="process1-thumb"><br>是不是很炫酷！<br>OK了，这个时候你重新部署一下，看看是不是文章里已经有图片了呢，好处多多，不一一说明。那么中鸟就可以了，老鸟干什么？来吧！<br>注意：<br>七牛目前只支持一个请求上传一个文件，所以一次上传多个文件的话，就等同于一次发送多个请求，七牛不支持。</p>
+<h2 id="老鸟阶段"><a href="#老鸟阶段" class="headerlink" title="老鸟阶段"></a>老鸟阶段</h2><h3 id="高阶-我要上天"><a href="#高阶-我要上天" class="headerlink" title="高阶:我要上天"></a>高阶:我要上天</h3><p>对于想弄懂深入的老鸟们，上述仅仅够用当然是不行的，来看看下面吧。<br>刚才说公开空间和私有空间的区别，对就在这：</p>
+<ul>
+<li>公开空间：<ol>
+<li>直接在界面上获得链接（上述图片已经演示了）。</li>
+<li>如果在给bucket绑定了域名的话，可以通过以下地址访问。<br><a href="http://domain/key" target="_blank" rel="external">http://domain/key</a></li>
+</ol>
+</li>
+</ul>
+<p>其中domain是bucket所对应的域名。七牛云为每一个bucket提供一个默认域名。用户也可以将自有的域名绑定到bucket上，通过自有域名访问七牛云,不过我没打算付费，所以“您的账户余额少于10元，暂无权限使用融合CDN，点击充值”，没办法使用自己的域名，不影响使用没必要了。key可理解为文件名，但可包含文件分隔符等其它字符。可参考：特殊key资源的访问。<br>注意： key必须采用utf8编码，如使用非utf8编码访问七牛云将反馈错误。</p>
+<ul>
+<li>私有空间：<br>  私有资源必须通过临时下载凭证(downloadToken)进行下载，如下：<pre><code>[GET] http://&lt;domain&gt;/&lt;key&gt;?e=&lt;deadline&gt;token=&lt;downloadToken&gt;
+</code></pre>  注意，尖括号不是必需，代表替换项。  </li>
+</ul>
+<p>deadline 由服务器时间加上 指定秒数 表示过期时间点。默认 3600 秒，服务器时间需校准，不要与标准时间相差太大。 downloadToken 可以使用 SDK 提供的方法生成。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/02/operating_system_process/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1055,7 +1221,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1066,7 +1232,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -1077,7 +1243,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
