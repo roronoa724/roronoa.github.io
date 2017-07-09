@@ -240,6 +240,310 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/04/Java_concurrency_basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="roronoa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="roronoa space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/04/Java_concurrency_basic/" itemprop="url">
+                  Java并发编程必备基础
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-04T21:21:00+08:00">
+                2017-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">本文转载自http://ifeve.com/高并发编程必备基础/ by 加多</div></pre></td></tr></table></figure>
+<h2 id="一-前言"><a href="#一-前言" class="headerlink" title="一. 前言"></a>一. 前言</h2><p>借用Java并发编程实践中的话”编写正确的程序并不容易，而编写正常的并发程序就更难了”，相比于顺序执行的情况，多线程的线程安全问题是微妙而且出乎意料的，因为在没有进行适当同步的情况下多线程中各个操作的顺序是不可预期的，本文算是对多线程情况下同步策略的一个简单介绍。</p>
+<h2 id="二-什么是线程安全问题"><a href="#二-什么是线程安全问题" class="headerlink" title="二. 什么是线程安全问题"></a>二. 什么是线程安全问题</h2><p><font color="#800000">线程安全问题</font>是指当多个线程同时读写一个状态变量，并且没有任何同步措施时候，导致脏数据或者其他不可预见的结果的问题。Java中首要的同步策略是使用<font color="#800000">synchronized</font>关键字，它提供了可重入的独占锁。</p>
+<h2 id="三-什么是共享变量可见性问题"><a href="#三-什么是共享变量可见性问题" class="headerlink" title="三. 什么是共享变量可见性问题"></a>三. 什么是共享变量可见性问题</h2><p>要谈可见性首先需要介绍下多线程处理共享变量时候的Java中内存模型。<br>在Java中，所有实例域、静态域和数组元素都存储在堆内存中，堆内存在线程之间共享。局部变量(Local Variables)、方法定义参数(Formal Method Parameters)和异常处理器参数(Exception Handler Parameters)不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。<br>Java线程之间的通信由Java内存模型(简称<strong>JMM</strong>)控制，JMM决定一个线程对共享变量的写入何时可对另一个线程可见。从抽象的角度看，JMM定义了线程和主内存之间的抽象关系：<strong>线程之间的共享变量存储在<font color="#800000">主内存(Main Memory)</font>之中，每个线程都有一个私有的<font color="#800000">本地内存(Local Memory)</font>，本地内存中存储了该线程以读/写共享变量的副本。</strong>本地内存是JMM的一个抽象概念，其并不真实存在。它涵盖了缓存、写缓冲区、寄存器以及其他的硬件和编译器优化。Java的内存模型抽象示意如下图所示。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/jmm-1.png?imageMogr2/thumbnail/!50p" alt="jmm-1"><br>Java内存模型规定了所有的变量都存放在主内存中，当线程使用变量时候都是把主内存里面的变量拷贝到了自己的本地内存当中。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/jmm-2.png?imageMogr2/thumbnail/!50p" alt="jmm-2"><br>上图是双核CPU系统架构，每核有自己的控制器和运算器，其中控制器包含一组寄存器和操作控制器，运算器执行算术逻辑运算，并且有自己的一级缓存，并且有些架构里面双核还有个共享的二级缓存。对应Java内存模型里面的工作内存，在实现上这里是指L1或者L2缓存或者自己cpu的寄存器。<br>当线程操作一个共享变量时候操作流程为：  </p>
+<ul>
+<li>线程首先从主内存拷贝共享变量到自己的工作空间。</li>
+<li>然后对工作空间里的变量进行处理。</li>
+<li>处理完后更新变量值到主内存。  </li>
+</ul>
+<p>那么假如线程A和B同时去处理一个共享变量，会出现什么情况？<br>首先他们都会去走上面的三个流程，假如线程A拷贝共享变量到了工作内存，并且已经对数据进行了更新但是还没有更新会主内存（结果可能目前存放在当前cpu的寄存器或者高速缓存），这时候线程B拷贝共享变量到了自己的工作内存进行处理，处理后，线程A才把自己的处理结果更更新到主内存或者缓存，可知 线程B处理的并不是线程A处理后的结果，也就是说线程A处理后的变量值对线程B不可见，这就是共享变量的<strong>不可见性问题</strong>。<br>构成共享变量内存不可见原因是因为三步流程不是原子性操作，我们知道ArrayList是线程不安全的，因为他的读写方法没有同步策略，会导致脏数据和不可预期的结果。下面会讲到使用恰当同步就可以解决这个问题。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">// 这是线程不安全的</div><div class="line">public class ArrayList&lt;E&gt; </div><div class="line">&#123;</div><div class="line">    public E get(int index) &#123;</div><div class="line">        rangeCheck(index);</div><div class="line">        </div><div class="line">        return elementData(index);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public E set(int index, E element) &#123;</div><div class="line">        rangeCheck(index);</div><div class="line"></div><div class="line">        E oldValue = elementData(index);</div><div class="line">        elementData[index] = element;</div><div class="line">        return oldValue;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="四-原子性"><a href="#四-原子性" class="headerlink" title="四. 原子性"></a>四. 原子性</h2><h3 id="4-1-介绍"><a href="#4-1-介绍" class="headerlink" title="4.1 介绍"></a>4.1 介绍</h3><p>假设线程A执行操作Ao和线程B执行操作Bo，那么从A看，当B线程执行Bo操作时候，那么Bo操作全部执行，要么全部不执行，我们称Ao和Bo操作互为原子性操作，在设计计数器时候一般都是先读取当前值，然后+1，然后更新会变量，是读-改-写的过程，这个过程必须是原子性的操作。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">public class ThreadUnsafeTest &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">        List&lt;Thread&gt; incThreads = new ArrayList&lt;&gt;();</div><div class="line">        for (int i = 0; i &lt; 5; i++) &#123;</div><div class="line">            incThreads.add(new Thread(new IncRunnable()));</div><div class="line">        &#125;</div><div class="line">        incThreads.stream().forEach(thread -&gt; &#123;</div><div class="line">            thread.start();</div><div class="line">        &#125;);</div><div class="line">        // 等待所有子线程执行完毕</div><div class="line">        Thread.sleep(500);</div><div class="line">        System.out.println(IncRunnable.getCount());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">class IncRunnable implements Runnable &#123;</div><div class="line"></div><div class="line">    static ThreadUnsafeCounter threadUnsafeCounter = new ThreadUnsafeCounter();</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        for (int i = 0; i &lt; 10000; i++) &#123;</div><div class="line">            threadUnsafeCounter.inc();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    static int getCount() &#123;</div><div class="line">        return threadUnsafeCounter.getCount();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class ThreadUnsafeCounter &#123;</div><div class="line">    private int count = 0;</div><div class="line"></div><div class="line">    public int getCount() &#123;</div><div class="line">        return count;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void inc() &#123;</div><div class="line">        ++count;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">```  </div><div class="line">上述代码启动五个子线程，每个子线程对计数器对象循环进行自增操作10000次。预期结果应该为50000。但是因为ThreadUnsafeCounter计数器对count的自增操作是非线程安全的(读-改-写)，对照上文讲解的Java内存模型，五个线程可能同时从内存中读取相同count值到自己的本地内存，修改后再写回内存，对我们而言，带来的结果只是count自增了一次而已。所以产生的结果极大可能性不符合我们的预期。在笔者的笔记本上运行该段代码后得到的结果为13560，与预期的结果相差甚远。  </div><div class="line">为了实现线程安全的操作，方法一是使用&lt;font color=#800000&gt;Synchronized&lt;/font&gt;对计数器的方法进行同步如下：</div></pre></td></tr></table></figure>
+<p>class ThreadSafeCounter {<br>    private int count = 0;</p>
+<pre><code>public synchronized int getCount() {
+    return count;
+}
+
+public synchronized void inc() {
+    count += 1;
+}
+</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">使用Synchronized改写后，我们可以看到输出为预期结果50000。注意，这里不能简单的使用volatile修饰value进行同步，因为变量值依赖了当前值。  </div><div class="line">使用Synchronized确实可以实现线程安全，即实现可见性和同步，但是Synchronized是独占锁，没有获取内部锁的线程会被阻塞掉，那么有没有刚好的实现？答案是肯定的。</div><div class="line">### 4.2 原子变量类</div><div class="line">原子变量类比锁更轻巧，比如AtomicInteger代表了一个Integer值，并提供了get,set方法，get，set方法语义和volatile相同，因为AtomicInteger内部就是使用了volatile修饰的真正的Integer变量。另外提供了原子性的自增自减操作，所以计数器可以改下为：</div></pre></td></tr></table></figure>
+<p>class ThreadSafeCounter {<br>    private AtomicInteger count = new AtomicInteger(0);</p>
+<pre><code>public synchronized int getCount() {
+    return count.get();
+}
+
+public synchronized void inc() {
+    count.getAndIncrement();
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">相比使用Synchronized的好处在于原子类操作不会导致线程的挂起和重新调度，因为他内部使用的是&lt;font color=#800000&gt;CAS&lt;/font&gt;的非阻塞算法。  </div><div class="line">常用的原子类变量为：AtomicLong、AtomicInteger、AtomicBoolean和AtomicReference。</div><div class="line">## 五. CAS介绍</div><div class="line">&lt;font color=#800000&gt;CAS&lt;/font&gt;是CompareAndSet的缩写，也就是比较并设置，CAS有三个操作数分别为：**内存位置**，**旧的预期值**，**新的值**。操作含义是当内存位置的变量值为旧的预期值时候使用新的值替换旧的值。通俗的说就是看内存位置的变量值是不是我给的旧的预期值，如果是则使用我给的新的值替换他，如果不是返回给我旧值。这个是处理器提供的一个原子性指令。AtomicLong的自增就是使用这种方式实现：</div></pre></td></tr></table></figure></p>
+<p>public final long incrementAndGet() {<br>    for (;;) {<br>        long current = get();（1）<br>        long next = current + 1;（2）<br>        if (compareAndSet(current, next))（3）<br>            return next;<br>    }<br>}</p>
+<p>public final boolean compareAndSet(long expect, long update) {<br>    return unsafe.compareAndSwapLong(this, valueOffset, expect, update);<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">假如当前值为1，那么线程A和检查B同时执行到了（3）时候各自的next都是2，current=1，假如线程A先执行了3，那么这个是原子性操作，会把当前值更新为2并且返回1，if判断true所以incrementAndGet返回2。这时候线程B执行3，因为current=1而当前变量实际值为2，所以if判断为false，继续循环，如果没有其他线程去自增变量的话，这次线程B就会更新变量为3然后退出。  </div><div class="line">这里使用了无限循环使用CAS进行轮询检查，虽然一定程度浪费了cpu资源，但是相比锁来说避免的线程上下文切换和调度。</div><div class="line">## 六.什么是可重入锁</div><div class="line">当一个线程要获取一个被其他线程占用的锁时候，该线程会被阻塞，那么当一个线程再次获取它自己已经获取的锁时候是否会被阻塞呢？如果不需要阻塞那么我们说该锁是**可重入锁**，也就是说只要该线程获取了该锁，那么可以无限制次数进入被该锁锁住的代码。  </div><div class="line">先看一个例子如果锁不是可重入的，看看会出现什么问题。</div></pre></td></tr></table></figure></p>
+<p>public class Hello {</p>
+<pre><code>public static void main(String[] args) {
+    new Hello().printB();
+}
+
+public synchronized void printA() {
+    System.out.println(&quot;printA&quot;);
+}
+
+public synchronized void printB() {
+    System.out.println(&quot;printB&quot;);
+    printA();
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">如上面代码当调用printB函数前会先获取内置锁，然后打印输出，然后调用helloA方法，调用前会先去获取内置锁，如果内置锁不是可重入的那么该调用就会导致死锁了，因为线程持有并等待了锁。  </div><div class="line">实际上**内部锁是可重入锁**，例如synchronized关键字管理的方法，可重入锁的原理是在锁内部维护了一个线程标示，标示该锁目前被那个线程占用，然后关联一个计数器，一开始计数器值为0，说明该锁没有被任何线程占用，当一个线程获取了该锁，计数器会变成1，其他线程在获取该锁时候发现锁的所有者不是自己所以被阻塞，但是当获取该锁的线程再次获取锁时候发现锁拥有者是自己会把计数器值+1，当释放锁后计数器会-1，当计数器为0时候，锁里面的线程标示重置为null，这时候阻塞的线程会获取被唤醒来获取该锁。</div><div class="line">## 七.Synchronized关键字</div><div class="line">### 7.1 Synchronized介绍</div><div class="line">&lt;font color=#800000&gt;synchronized&lt;/font&gt;块是Java提供的一种强制性内置锁，每个Java对象都可以隐式的充当一个用于同步的锁的功能，这些内置的锁被称为**内部锁**或者叫**监视器锁**，执行代码在进入synchronized代码块前会自动获取内部锁，这时候其他线程访问该同步代码块时候会阻塞掉。拿到内部锁的线程会在正常退出同步代码块或者异常抛出后释放内部锁，这时候阻塞掉的线程才能获取内部锁进入同步代码块。  </div><div class="line">### 7.2 Synchronized同步实例</div><div class="line">内部锁是一种**互斥锁**，具体说是同时只有一个线程可以拿到该锁，当一个线程拿到该锁并且没有释放的情况下，其他线程只能等待。  </div><div class="line">对于上面说的ArrayList可以使用synchronized进行同步来处理可见性问题。</div></pre></td></tr></table></figure></p>
+<p>// 使用synchronized对方法进行同步<br>public class ArrayList<e><br>{<br>    public synchronized E get(int index) {<br>        rangeCheck(index);</e></p>
+<pre><code>    return elementData(index);
+}
+
+public synchronized E set(int index, E element) {
+    rangeCheck(index);
+
+    E oldValue = elementData(index);
+    elementData[index] = element;
+    return oldValue;
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">![sync-1](http://osio2xhqh.bkt.clouddn.com/image/png/sync-1.png?imageMogr2/thumbnail/!50p)  </div><div class="line">如上图当线程A获取内部锁进入同步代码块后，线程B也准备要进入同步块，但是由于A还没释放锁，所以B现在进入等待，使用同步可以保证线程A获取锁到释放锁期间的变量值对B获取锁后都可见。也就是说当B开始执行A执行的代码同步块时候可以看到A操作的所有变量值，这里具体说是当线程B获取b的值时候能够保证获取的值是2。这时因为**线程A进入同步块修改变量值后，会在退出同步块前把值刷新到主内存，而线程B在进入同步块前会首先清空本地内存内容，从主内存重新获取变量值，所以实现了可见性**。但是要注意一点所有线程使用的是同一个锁。  </div><div class="line">注意，synchronized关键字会引起**线程上下文切换**和**线程调度**。</div><div class="line">## 八.ReentrantReadWriteLock介绍</div><div class="line">使用synchronized可以实现同步，但是缺点是同时只有一个线程可以访问共享变量，但是正常情况下，对于多个读操作操作共享变量时候是不需要同步的，synchronized时候无法实现多个读线程同时执行，而大部分情况下读操作次数多于写操作，所以这大大降低了并发性，所以出现了ReentrantReadWriteLock，它可以实现**读写分离，多个线程同时进行读取，但是最多一个写线程存在**。  </div><div class="line">来看下面这段代码，是对上面ArrayList的一个改写。</div></pre></td></tr></table></figure></p>
+<p>import java.util.Random;<br>import java.util.concurrent.Callable;<br>import java.util.concurrent.ExecutionException;<br>import java.util.concurrent.ExecutorService;<br>import java.util.concurrent.Executors;<br>import java.util.concurrent.locks.Lock;<br>import java.util.concurrent.locks.ReadWriteLock;<br>import java.util.concurrent.locks.ReentrantReadWriteLock;</p>
+<p>public class MyArrayList<e> {</e></p>
+<pre><code>public static void main(String[] args) throws ExecutionException, InterruptedException {
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    int size = 10;
+    Random random = new Random();
+    MyArrayList&lt;Integer&gt; myArrayList = new MyArrayList&lt;&gt;(size);
+    Runnable writeTask = () -&gt; myArrayList.set(random.nextInt(size), random.nextInt(size));
+    Callable&lt;Integer&gt; readTask = () -&gt; {
+        int element = myArrayList.get(random.nextInt(size));
+        return element;
+    };
+
+    for (int i = 0; i &lt; 10; i++) {
+        executorService.submit(writeTask);
+</code></pre><p>//            executorService.submit(readTask);<br>        }<br>        executorService.shutdown();<br>    }</p>
+<pre><code>private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+transient Object[] elementData;
+
+public MyArrayList(int size) {
+    elementData = new Object[size];
+}
+
+public E get(int index) {
+    Lock readLock = readWriteLock.readLock();
+    readLock.lock();
+    System.out.println(Thread.currentThread().getName() + &quot;--getReadLock&quot;);
+    try {
+        Thread.sleep(1000);
+        return (E) elementData[index];
+    } catch (InterruptedException e) {
+        return null;
+    } finally {
+        readLock.unlock();
+        System.out.println(Thread.currentThread().getName() + &quot;--releaseReadLock&quot;);
+    }
+}
+
+public void set(int index, E element) {
+    Lock writeLock = readWriteLock.writeLock();
+    writeLock.lock();
+    System.out.println(Thread.currentThread().getName() + &quot;--getWriteLock&quot;);
+    try {
+        Thread.sleep(1000);
+        elementData[index] = element;
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } finally {
+        writeLock.unlock();
+        System.out.println(Thread.currentThread().getName() + &quot;--releaseWriteLock&quot;);
+    }
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这段代码旨在体现ReentrantReadWriteLock的读写分离锁功能。MyArrayList的get和set方法分别使用了读锁和写锁进行锁操作。为了方便测试线程进入互斥区的顺序，get和set操作都设置了1s的延时。main方法中启动10个线程同时对list进行写操作，结果如下：</div></pre></td></tr></table></figure></p>
+<p>pool-1-thread-2–getWriteLock<br>pool-1-thread-2–releaseWriteLock<br>pool-1-thread-1–getWriteLock<br>pool-1-thread-1–releaseWriteLock<br>pool-1-thread-3–getWriteLock<br>pool-1-thread-3–releaseWriteLock<br>pool-1-thread-4–getWriteLock<br>pool-1-thread-4–releaseWriteLock<br>pool-1-thread-5–getWriteLock<br>pool-1-thread-5–releaseWriteLock<br>pool-1-thread-6–getWriteLock<br>pool-1-thread-6–releaseWriteLock<br>pool-1-thread-7–getWriteLock<br>pool-1-thread-7–releaseWriteLock<br>pool-1-thread-8–getWriteLock<br>pool-1-thread-8–releaseWriteLock<br>pool-1-thread-9–getWriteLock<br>pool-1-thread-9–releaseWriteLock<br>pool-1-thread-10–getWriteLock<br>pool-1-thread-10–releaseWriteLock<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">从结果中可以看出，在上一个线程完成自身的写操作之前，下一个线程是无法获得写锁并开始写入的。  </div><div class="line">将executorService.submit(writeTask)这行代码注释掉，去掉executorService.submit(readTask)的注释，重新运行程序对十个线程同时进行读操作进行测试结果如下：</div></pre></td></tr></table></figure></p>
+<p>pool-1-thread-2–getReadLock<br>pool-1-thread-7–getReadLock<br>pool-1-thread-6–getReadLock<br>pool-1-thread-8–getReadLock<br>pool-1-thread-5–getReadLock<br>pool-1-thread-1–getReadLock<br>pool-1-thread-4–getReadLock<br>pool-1-thread-3–getReadLock<br>pool-1-thread-10–getReadLock<br>pool-1-thread-9–getReadLock<br>pool-1-thread-2–releaseReadLock<br>pool-1-thread-3–releaseReadLock<br>pool-1-thread-10–releaseReadLock<br>pool-1-thread-7–releaseReadLock<br>pool-1-thread-9–releaseReadLock<br>pool-1-thread-4–releaseReadLock<br>pool-1-thread-8–releaseReadLock<br>pool-1-thread-1–releaseReadLock<br>pool-1-thread-6–releaseReadLock<br>pool-1-thread-5–releaseReadLock<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">可以看出如果是读操作的话，读锁允许多个线程同时进入互斥区进行操作。  </div><div class="line">总结一下，如代码在get方法时候通过readWriteLock.readLock()获取了读锁，多个线程可以同时获取这读锁，set方法通过readWriteLock.writeLock()获取了写锁，同时只有一个线程可以获取写锁，其他线程在获取写锁时候会阻塞直到写锁被释放。假如一个线程已经获取了读锁，这时候如果一个线程要获取写锁时候要等待直到释放了读锁，如果一个线程获取了写锁，那么所有获取读锁的线程需要等待直到写锁被释放。所以相比synchronized来说运行多个读者同时存在，所以提高了并发量。  </div><div class="line">注意，需要使用者需要显式的调用Lock与Unlock操作。</div><div class="line">## 九.Volatile变量</div><div class="line">对于避免不可见性问题，Java还提供了一种弱形式的同步，即使用了&lt;font color=#800000&gt;volatile&lt;/font&gt;关键字。该关键字**确保了对一个变量的更新对其他线程可见**。当一个变量被声明为volatile时候，线程写入时候不会把值缓存在寄存器或者或者在其他地方，当线程读取的时候会从主内存重新获取最新值，而不是使用当前线程的拷贝内存变量值。  </div><div class="line">volatile虽然提供了可见性保证，但是**不能使用他来构建复合的原子性操作**，也就是说当一个变量依赖其他变量或者更新变量值时候新值依赖当前老值时候不在适用。与synchronized相似之处在于如图：  </div><div class="line">![sync-2](http://osio2xhqh.bkt.clouddn.com/image/png/sync-2.png?imageMogr2/thumbnail/!50p)  </div><div class="line">如图线程A修改了volatile变量b的值，然后线程B读取了改变量值，那么所有A线程在写入变量b值前可见的变量值，在B读取volatile变量b后对线程B都是可见的，图中线程B对A操作的变量a,b的值都可见的。volatile的内存语义和synchronized有类似之处，具体说是说当线程写入了volatile变量值就等价于线程退出synchronized同步块(会把写入到本地内存的变量值同步到主内存)，读取volatile变量值就相当于进入同步块(会先清空本地内存变量值，从主内存获取最新值)。  </div><div class="line">下面的Integer也是线程不安全的，因为没有进行同步措施。</div></pre></td></tr></table></figure></p>
+<p>public class ThreadNotSafeInteger {</p>
+<pre><code>private int value;
+
+public int get() {
+    return value;
+}
+public void set(int value) {
+    this.value = value;
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用synchronized关键字进行同步如下：</div></pre></td></tr></table></figure></p>
+<p>public class ThreadSafeInteger {</p>
+<pre><code>private int value;
+
+public synchronized int get() {
+    return value;
+}
+
+public synchronized void set(int value) {
+    this.value = value;
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">等价于使用volatile进行同步如下：</div></pre></td></tr></table></figure></p>
+<p>public class ThreadSafeInteger {</p>
+<pre><code>private volatile int value;
+
+public int get() {
+    return value;
+}
+
+public void set(int value) {
+    this.value = value;
+}
+</code></pre><p>}<br>```<br>这里使用synchronized和使用volatile是等价的，但是并不是所有情况下都是等价，一般只有满足下面所有条件才能使用volatile</p>
+<ul>
+<li>写入变量值时候不依赖变量的当前值，或者能够保证只有一个线程修改变量值。</li>
+<li>写入的变量值不依赖其他变量的参与。</li>
+<li>读取变量值时候不能因为其他原因进行加锁。</li>
+</ul>
+<p>另外，加锁可以同时保证可见性和原子性，而volatile只保证变量值的可见性。<br>注意，volatile关键字不会引起线程上下文切换和线程调度。另外volatile还用来解决重排序问题，在后面会讲到。</p>
+<h2 id="十-乐观锁与悲观锁"><a href="#十-乐观锁与悲观锁" class="headerlink" title="十.乐观锁与悲观锁"></a>十.乐观锁与悲观锁</h2><h3 id="10-1-悲观锁"><a href="#10-1-悲观锁" class="headerlink" title="10.1 悲观锁"></a>10.1 悲观锁</h3><p><strong>悲观锁</strong>，指数据被外界修改持保守态度(悲观)，在整个数据处理过程中，将数据处于锁定状态。悲观锁的实现，往往依靠数据库提供的锁机制。数据库中实现是对数据记录进行操作前，先给记录加排它锁，如果获取锁失败，则说明数据正在被其他线程修改，则等待或者抛出异常。如果加锁成功，则获取记录，对其修改，然后事务提交后释放排它锁。<br>一个例子：select * from 表 where .. for update;<br>悲观锁是先加锁再访问策略，处理加锁会让数据库产生额外的开销，还有增加产生死锁的机会，另外在多个线程只读情况下不会产生数据不一致行问题，没必要使用锁，只会增加系统负载，降低并发性，因为当一个事务锁定了该条记录，其他读该记录的事务只能等待。</p>
+<h3 id="10-2-乐观锁"><a href="#10-2-乐观锁" class="headerlink" title="10.2 乐观锁"></a>10.2 乐观锁</h3><p><strong>乐观锁</strong>是相对悲观锁来说的，它认为数据一般情况下不会造成冲突，所以在访问记录前不会加排他锁，而是在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，具体说根据update返回的行数让用户决定如何去做。乐观锁并不会使用数据库提供的锁机制，一般在表添加version字段或者使用业务状态来做。<br>乐观锁直到提交的时候才去锁定，所以不会产生任何锁和死锁。</p>
+<h2 id="十一-独占锁与共享锁"><a href="#十一-独占锁与共享锁" class="headerlink" title="十一.独占锁与共享锁"></a>十一.独占锁与共享锁</h2><p>根据锁能够被单个线程还是多个线程共同持有，锁又分为<strong>独占锁</strong>和<strong>共享锁</strong>。独占锁保证任何时候都只有一个线程能读写权限，ReentrantLock就是以独占方式实现的互斥锁。共享锁则可以同时有多个读线程，但最多只能有一个写线程，读和写是互斥的，例如ReadWriteLock读写锁，它允许一个资源可以被多线程同时进行读操作，或者被一个线程写操作，但两者不能同时进行。<br><strong>独占锁是一种悲观锁</strong>，每次访问资源都先加上互斥锁，这限制了并发性，因为读操作并不会影响数据一致性，而独占锁只允许同时一个线程读取数据，其他线程必须等待当前线程释放锁才能进行读取。<br><strong>共享锁是一种乐观锁</strong>，它放宽了加锁的条件，允许多个线程同时进行读操作。</p>
+<h2 id="十二-公平锁与非公平锁"><a href="#十二-公平锁与非公平锁" class="headerlink" title="十二.公平锁与非公平锁"></a>十二.公平锁与非公平锁</h2><p>根据线程获取锁的抢占机制锁可以分为<strong>公平锁</strong>和<strong>非公平锁</strong>。</p>
+<ul>
+<li>公平锁表示线程获取锁的顺序是按照线程加锁的时间多少来决定的，也就是最早加锁的线程将最早获取锁，也就是先来先得的<strong>FIFO顺序</strong>。</li>
+<li>而非公平锁则运行闯入，也就是先来不一定先得。  </li>
+</ul>
+<p>ReentrantLock提供了公平和非公平锁的实现：<br>公平锁 : ReentrantLock pairLock = new ReentrantLock(true);<br>非公平锁 : ReentrantLock unpairLock = new ReentrantLock(false);<br>如果构造函数不传递参数，则默认是非公平锁。<br>在没有公平性需求的前提下尽量使用非公平锁，因为公平锁会带来性能开销。<br>假设线程A已经持有了锁，这时候线程B请求该锁将会被挂起，当线程A释放锁后，假如当前有线程C也需要获取该锁，如果采用非公平锁方式，则根据线程调度策略线程B和C两者之一可能获取锁，这时候不需要任何其他干涉，如果使用公平锁则需要把C挂起，让B获取当前锁。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/03/hexo-imgbed/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1221,7 +1525,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
