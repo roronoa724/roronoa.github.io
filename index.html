@@ -240,6 +240,360 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/21/java_basic_ConcurrentModificationException/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="roronoa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="roronoa space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/21/java_basic_ConcurrentModificationException/" itemprop="url">
+                  Java基础知识-集合-ConcurrentModificationException异常原因和解决方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-21T22:19:00+08:00">
+                2017-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">转载自：http://www.cnblogs.com/dolphin0520/p/3933551.html</div></pre></td></tr></table></figure>
+<p>在Java中，对Vector、ArrayList在迭代的时候如果同时对其进行修改就会抛出java.util.ConcurrentModificationException异常。下面我们就来讨论以下这个异常出现的原因以及解决办法。<br>以下是本文目录大纲：</p>
+<ul>
+<li>ConcurrentModificationException异常出现的原因</li>
+<li>在单线程环境下的解决办法</li>
+<li>在多线程环境下的解决方法</li>
+</ul>
+<h2 id="ConcurrentModificationException异常出现的原因"><a href="#ConcurrentModificationException异常出现的原因" class="headerlink" title="ConcurrentModificationException异常出现的原因"></a>ConcurrentModificationException异常出现的原因</h2><p>先看下面这段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</div><div class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</div><div class="line">        list.add(<span class="number">2</span>);</div><div class="line">        Iterator&lt;Integer&gt; iterator = list.iterator();</div><div class="line">        <span class="keyword">while</span>(iterator.hasNext())&#123;</div><div class="line">            Integer integer = iterator.next();</div><div class="line">            <span class="keyword">if</span>(integer==<span class="number">2</span>)</div><div class="line">                list.remove(integer);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/ConcurrentModificationException-1.png" alt="ConcurrentModificationException-1"><br>从异常信息可以发现，异常出现在checkForComodification()方法中。<br>我们不忙看checkForComodification()方法的具体实现，我们先根据程序的代码一步一步看ArrayList源码的实现：<br>首先看ArrayList的iterator()方法的具体实现，查看源码发现在ArrayList的源码中并没有iterator()这个方法，那么很显然这个方法应该是其父类或者实现的接口中的方法，我们在其父类AbstractList中找到了iterator()方法的具体实现，下面是其实现代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Itr();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从这段代码可以看出返回的是一个指向Itr类型对象的引用，我们接着看Itr的具体实现，在AbstractList类中找到了Itr类的具体实现，它是AbstractList的一个成员内部类，下面这段代码是Itr类的所有实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Itr</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">int</span> cursor = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> lastRet = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> expectedModCount = modCount;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> cursor != size();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">        checkForComodification();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            E next = get(cursor);</div><div class="line">            lastRet = cursor++;</div><div class="line">            <span class="keyword">return</span> next;</div><div class="line">        &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</div><div class="line">            checkForComodification();</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (lastRet == -<span class="number">1</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException();</div><div class="line">        checkForComodification();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            AbstractList.<span class="keyword">this</span>.remove(lastRet);</div><div class="line">            <span class="keyword">if</span> (lastRet &lt; cursor)</div><div class="line">                cursor--;</div><div class="line">            lastRet = -<span class="number">1</span>;</div><div class="line">            expectedModCount = modCount;</div><div class="line">        &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">checkForComodification</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (modCount != expectedModCount)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先我们看一下它的几个成员变量：</p>
+<ul>
+<li>cursor：表示下一个要访问的元素的索引，从next()方法的具体实现就可看出</li>
+<li>lastRet：表示上一个访问的元素的索引</li>
+<li>expectedModCount：表示对ArrayList修改次数的期望值，它的初始值为modCount。</li>
+<li>modCount是AbstractList类中的一个成员变量</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">transient</span> <span class="keyword">int</span> modCount = <span class="number">0</span>;</div></pre></td></tr></table></figure>
+<p>该值表示对List的修改次数，查看ArrayList的add()和remove()方法就可以发现，每次调用add()方法或者remove()方法就会对modCount进行加1操作。<br>好了，到这里我们再看看上面的程序：<br>当调用list.iterator()返回一个Iterator之后，通过Iterator的hashNext()方法判断是否还有元素未被访问，我们看一下hasNext()方法，hashNext()方法的实现很简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> cursor != size();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果下一个访问的元素下标不等于ArrayList的大小，就表示有元素需要访问，这个很容易理解，如果下一个访问元素的下标等于ArrayList的大小，则肯定到达末尾了。<br>然后通过Iterator的next()方法获取到下标为0的元素，我们看一下next()方法的具体实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">    checkForComodification();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        E next = get(cursor);</div><div class="line">        lastRet = cursor++;</div><div class="line">        <span class="keyword">return</span> next;</div><div class="line">    &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</div><div class="line">        checkForComodification();</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里是非常关键的地方：首先在next()方法中会调用checkForComodification()方法，然后根据cursor的值获取到元素，接着将cursor的值赋给lastRet，并对cursor的值进行加1操作。初始时，cursor为0，lastRet为-1，那么调用一次之后，cursor的值为1，lastRet的值为0。注意此时，modCount为0，expectedModCount也为0。<br>接着往下看，程序中判断当前元素的值是否为2，若为2，则调用list.remove()方法来删除该元素。<br>我们看一下在ArrayList中的remove()方法做了什么：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; size; index++)</div><div class="line">            <span class="keyword">if</span> (elementData[index] == <span class="keyword">null</span>) &#123;</div><div class="line">                fastRemove(index);</div><div class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; size; index++)</div><div class="line">            <span class="keyword">if</span> (o.equals(elementData[index])) &#123;</div><div class="line">                fastRemove(index);</div><div class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fastRemove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">    modCount++;</div><div class="line">    <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</div><div class="line">        System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</div><div class="line">                numMoved);</div><div class="line">    elementData[--size] = <span class="keyword">null</span>; <span class="comment">// Let gc do its work</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过remove方法删除元素最终是调用的fastRemove()方法，在fastRemove()方法中，首先对modCount进行加1操作（因为对集合修改了一次），然后接下来就是删除元素的操作，最后将size进行减1操作，并将引用置为null以方便垃圾收集器进行回收工作。<br>那么注意此时各个变量的值：对于iterator，其expectedModCount为0，cursor的值为1，lastRet的值为0。<br>对于list，其modCount为1，size为0。<br>接着看程序代码，执行完删除操作后，继续while循环，调用hasNext方法()判断，由于此时cursor为1，而size为0，那么返回true，所以继续执行while循环，然后继续调用iterator的next()方法：<br>注意，此时要注意next()方法中的第一句：checkForComodification()。<br>在checkForComodification方法中进行的操作是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">checkForComodification</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (modCount != expectedModCount)</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果modCount不等于expectedModCount，则抛出ConcurrentModificationException异常。<br>很显然，此时modCount为1，而expectedModCount为0，因此程序就抛出了ConcurrentModificationException异常。<br>到这里，想必大家应该明白为何上述代码会抛出ConcurrentModificationException异常了。<br>关键点就在于：调用list.remove()方法导致modCount和expectedModCount的值不一致。<br>注意，像使用for-each进行迭代实际上也会出现这种问题。</p>
+<h2 id="在单线程环境下的解决办法"><a href="#在单线程环境下的解决办法" class="headerlink" title="在单线程环境下的解决办法"></a>在单线程环境下的解决办法</h2><p>既然知道原因了，那么如何解决呢？<br>其实很简单，细心的朋友可能发现在Itr类中也给出了一个remove()方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (lastRet == -<span class="number">1</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException();</div><div class="line">    checkForComodification();</div><div class="line"> </div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        AbstractList.<span class="keyword">this</span>.remove(lastRet);</div><div class="line">        <span class="keyword">if</span> (lastRet &lt; cursor)</div><div class="line">            cursor--;</div><div class="line">        lastRet = -<span class="number">1</span>;</div><div class="line">        expectedModCount = modCount;</div><div class="line">    &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这个方法中，删除元素实际上调用的就是list.remove()方法，但是它多了一个操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expectedModCount = modCount;</div></pre></td></tr></table></figure>
+<p>因此，在迭代器中如果要删除元素的话，需要调用Itr类的remove方法。<br>将上述代码改为下面这样就不会报错了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</div><div class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</div><div class="line">        list.add(<span class="number">2</span>);</div><div class="line">        Iterator&lt;Integer&gt; iterator = list.iterator();</div><div class="line">        <span class="keyword">while</span>(iterator.hasNext())&#123;</div><div class="line">            Integer integer = iterator.next();</div><div class="line">            <span class="keyword">if</span>(integer==<span class="number">2</span>)</div><div class="line">                iterator.remove();   <span class="comment">//注意这个地方</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="在多线程环境下的解决方法"><a href="#在多线程环境下的解决方法" class="headerlink" title="在多线程环境下的解决方法"></a>在多线程环境下的解决方法</h2><p>上面的解决办法在单线程环境下适用，但是在多线程下适用吗？看下面一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</div><div class="line">        list.add(<span class="number">1</span>);</div><div class="line">        list.add(<span class="number">2</span>);</div><div class="line">        list.add(<span class="number">3</span>);</div><div class="line">        list.add(<span class="number">4</span>);</div><div class="line">        list.add(<span class="number">5</span>);</div><div class="line">        Thread thread1 = <span class="keyword">new</span> Thread()&#123;</div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                Iterator&lt;Integer&gt; iterator = list.iterator();</div><div class="line">                <span class="keyword">while</span>(iterator.hasNext())&#123;</div><div class="line">                    Integer integer = iterator.next();</div><div class="line">                    System.out.println(integer);</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        Thread.sleep(<span class="number">100</span>);</div><div class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">        &#125;;</div><div class="line">        Thread thread2 = <span class="keyword">new</span> Thread()&#123;</div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                Iterator&lt;Integer&gt; iterator = list.iterator();</div><div class="line">                <span class="keyword">while</span>(iterator.hasNext())&#123;</div><div class="line">                    Integer integer = iterator.next();</div><div class="line">                    <span class="keyword">if</span>(integer==<span class="number">2</span>)</div><div class="line">                        iterator.remove(); </div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">        &#125;;</div><div class="line">        thread1.start();</div><div class="line">        thread2.start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/ConcurrentModificationException-2.png" alt="ConcurrentModificationException-2"><br>有可能有朋友说ArrayList是非线程安全的容器，换成Vector就没问题了，实际上换成Vector还是会出现这种错误。<br>原因在于，虽然Vector的方法采用了synchronized进行了同步，但是由于Vector是继承的AbstarctList，因此通过Iterator来访问容器的话，事实上是不需要获取锁就可以访问。那么显然，由于使用iterator对容器进行访问不需要获取锁，在多线程中就会造成当一个线程删除了元素，由于modCount是AbstarctList的成员变量，因此可能会导致在其他线程中modCount和expectedModCount值不等。<br>就比如上面的代码中，很显然iterator是<strong>线程私有</strong>(这里是关键)的，初始时，线程1和线程2中的modCount、expectedModCount都为0，<br>当线程2通过iterator.remove()删除元素时，会修改modCount值为1，并且会修改线程2中的expectedModCount的值为1，而此时线程1中的expectedModCount值为0，这样就导致线程1中比较expectedModCount和modCount不等，而抛出异常。  </p>
+<p>因此一般有2种解决办法：<br>1）在使用iterator迭代的时候使用synchronized或者Lock进行同步；<br>2）使用并发容器CopyOnWriteArrayList代替ArrayList和Vector。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/18/learningPython_Module/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="roronoa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="roronoa space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/18/learningPython_Module/" itemprop="url">
+                  一步一步学Python--模块
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-18T20:21:00+08:00">
+                2017-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><font size="4"><strong>模块(Module)</strong></font>是Python程序的最高层组织单元。可以说，我们在Python世界中书写的代码都是必然存在于模块之中的。更具体而言，<strong>每一个文件就是一个模块，且模块可以引用(import)其他的模块</strong>。通常情况下，Python程序就是众多错综复杂且相互依赖的模块所组成的。所以了解模块对于我们了解Python项目的整体架构和运作方式都有着重要的意义。<br>本文将由浅入深，从基本概念着手，按照下面几个方面来进行讲解：</p>
+<ol>
+<li>为什么需要模块化？</li>
+<li>模块是如何运作的？</li>
+<li>模块基础编程实战</li>
+<li>模块包(Package)详解</li>
+<li>模块高阶用法</li>
+</ol>
+<p>希望读者读完这篇博客后能够对Python的模块知其然、知其所以然。并能熟练在日常开发中使用。</p>
+<h2 id="为什么需要模块化"><a href="#为什么需要模块化" class="headerlink" title="为什么需要模块化"></a>为什么需要模块化</h2><p>一言蔽之：模块化是一种处理复杂系统分解为更好的可管理模块的方式。<br>详细来说，模块化能够带来许多好处，下面列举三点：</p>
+<ul>
+<li>代码重用<br>  因为模块本质上就是一个文件，与交互命令行中输入的代码不同，它可以被永久保存，并能作为一个重用单元按需重新装载或运行。所以使用模块可以用来实现一些公共服务供系统其他模块调用。</li>
+<li>分隔系统命名空间<br>  模块还可以看做是对象名称，也称为模块的属性(attributes)的集合，在Python中，每个模块都具有自己独立的命名空间(namespace)，相同名字的函数和变量完全可以分别存在不同的模块中，最大程度避免了函数名和变量名冲突。</li>
+<li>大大提高了代码的可维护性和开发效率。</li>
+</ul>
+<p>目前为止还比较抽象，现在我们来对Python程序的整体结构进行一个概览，以来更好的理解模块在Python程序中充当的角色。</p>
+<h2 id="模块是如何运作的？"><a href="#模块是如何运作的？" class="headerlink" title="模块是如何运作的？"></a>模块是如何运作的？</h2><p>在理解模块的运作方式之前，先让我们来看一下通常的Python程序结构是怎样的。</p>
+<h3 id="Python程序概览"><a href="#Python程序概览" class="headerlink" title="Python程序概览"></a>Python程序概览</h3><p>先把自己平时写着玩儿的脚本抛到脑后，大部分生产环境的Python项目都是<strong>多文件</strong>(multifile,也就是多模块)系统。通常来说，这些文件会包含有Python声明语句(statements)，并且至少包含一个顶层(top-level)的主(main)文件，以及0个或多个补充文件，也就是我们所说的模块。<br>主文件的作用在于控制程序的核心执行流程，模块则负责为主文件和其他模块提供服务。如何使用其他模块提供的服务就引出了Python模块知识体系内最重要的关键字：<font color="#800000"><strong>import</strong></font>。  </p>
+<h3 id="import"><a href="#import" class="headerlink" title="import"></a>import</h3><p><font size="4"><strong>import</strong></font>是将系统中各个相互孤立的模块串联起来的纽带。下面这张图勾勒了一个简单但是通用的Python示例程序结构。这个示例程序由三个文件组成。a.py为主文件，b.py和c.py为模块文件。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/python_module_1.png?imageMogr2/thumbnail/!50p" alt=""><br>主文件a为了使用模块b提供的服务，代码中必然有这样一行(暂时先不考虑<em>from</em>的用法，后文会讲)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> b</div></pre></td></tr></table></figure>
+<p>这行代码的含义是：</p>
+<blockquote>
+<p>装载文件b.py(除非已经被装载过)，并通过模块名称b获得其所有属性的访问权限。</p>
+</blockquote>
+<p>为了实现这一目标，Python会顺次执行被import文件当中的声明语句。需要注意的有以下几点：</p>
+<ul>
+<li>在Python中，除非显示的在运行时(runtime)使用import关键字声明引用，否则是不会出现跨文件的模块链接(linking)关系解析的。亦即一个文件如果没有被import过的话，则是不会被解析的(主文件除外)。</li>
+<li>import声明中指定的模块名称在这里起到两个作用，其一为标识需要加载的模块文件名称(即b.py的文件名称)，其二该名称会作为装载模块的变量名(variable)供后续使用。</li>
+<li>模块中定义的对象也是在import后，在运行时生成的。举例来说，在主文件a引用模块b之后，可以通过b.spam引用模块b中的属性。这里的spam既可以是一个变量，也可以是一个函数。这种object.attribute类型的调用方式是引用模块当中变量的最常见方式。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/11/Java_concurrency_threadPoolExecutor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1670,7 +2024,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1681,7 +2035,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -1692,7 +2046,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

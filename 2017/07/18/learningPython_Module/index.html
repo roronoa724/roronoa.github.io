@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Operating System,Process," />
+  <meta name="keywords" content="Python," />
 
 
 
@@ -87,23 +87,18 @@
 
 
 
-<meta name="description" content="What is process?最简单的定义：进程(Process)是程序(Application)的一次运行实例(Instance of an executing program)。所以进程有时也被称为任务(task  or job)。操作系统的功能之一是代表上层应用访问和管理底层硬件。而这里所指的应用，仅表示保存在某处(硬盘，闪存，甚至是云)的程序代码，是一个静态实体(static entit">
+<meta name="description" content="前言模块(Module)是Python程序的最高层组织单元。可以说，我们在Python世界中书写的代码都是必然存在于模块之中的。更具体而言，每一个文件就是一个模块，且模块可以引用(import)其他的模块。通常情况下，Python程序就是众多错综复杂且相互依赖的模块所组成的。所以了解模块对于我们了解Python项目的整体架构和运作方式都有着重要的意义。本文将由浅入深，从基本概念着手，按照下面几个方">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于操作系统我们应该知道些什么？--进程">
-<meta property="og:url" content="http://roronoa.space/2017/07/02/operating_system_process/index.html">
+<meta property="og:title" content="一步一步学Python--模块">
+<meta property="og:url" content="http://roronoa.space/2017/07/18/learningPython_Module/index.html">
 <meta property="og:site_name" content="roronoa space">
-<meta property="og:description" content="What is process?最简单的定义：进程(Process)是程序(Application)的一次运行实例(Instance of an executing program)。所以进程有时也被称为任务(task  or job)。操作系统的功能之一是代表上层应用访问和管理底层硬件。而这里所指的应用，仅表示保存在某处(硬盘，闪存，甚至是云)的程序代码，是一个静态实体(static entit">
-<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process1.png?imageMogr2/thumbnail/!50p">
-<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process2.png?imageMogr2/thumbnail/!50p">
-<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process3.png?imageMogr2/thumbnail/!50p">
-<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process4.png">
-<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process5.png?imageMogr2/thumbnail/!50p">
-<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process6.png?imageMogr2/thumbnail/!50p">
-<meta property="og:updated_time" content="2017-07-03T14:18:04.000Z">
+<meta property="og:description" content="前言模块(Module)是Python程序的最高层组织单元。可以说，我们在Python世界中书写的代码都是必然存在于模块之中的。更具体而言，每一个文件就是一个模块，且模块可以引用(import)其他的模块。通常情况下，Python程序就是众多错综复杂且相互依赖的模块所组成的。所以了解模块对于我们了解Python项目的整体架构和运作方式都有着重要的意义。本文将由浅入深，从基本概念着手，按照下面几个方">
+<meta property="og:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/python_module_1.png?imageMogr2/thumbnail/!50p">
+<meta property="og:updated_time" content="2017-07-19T15:06:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于操作系统我们应该知道些什么？--进程">
-<meta name="twitter:description" content="What is process?最简单的定义：进程(Process)是程序(Application)的一次运行实例(Instance of an executing program)。所以进程有时也被称为任务(task  or job)。操作系统的功能之一是代表上层应用访问和管理底层硬件。而这里所指的应用，仅表示保存在某处(硬盘，闪存，甚至是云)的程序代码，是一个静态实体(static entit">
-<meta name="twitter:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/process1.png?imageMogr2/thumbnail/!50p">
+<meta name="twitter:title" content="一步一步学Python--模块">
+<meta name="twitter:description" content="前言模块(Module)是Python程序的最高层组织单元。可以说，我们在Python世界中书写的代码都是必然存在于模块之中的。更具体而言，每一个文件就是一个模块，且模块可以引用(import)其他的模块。通常情况下，Python程序就是众多错综复杂且相互依赖的模块所组成的。所以了解模块对于我们了解Python项目的整体架构和运作方式都有着重要的意义。本文将由浅入深，从基本概念着手，按照下面几个方">
+<meta name="twitter:image" content="http://osio2xhqh.bkt.clouddn.com/image/png/python_module_1.png?imageMogr2/thumbnail/!50p">
 
 
 
@@ -131,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://roronoa.space/2017/07/02/operating_system_process/"/>
+  <link rel="canonical" href="http://roronoa.space/2017/07/18/learningPython_Module/"/>
 
 
 
 
 
-  <title> 关于操作系统我们应该知道些什么？--进程 | roronoa space </title>
+  <title> 一步一步学Python--模块 | roronoa space </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -246,7 +241,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/02/operating_system_process/">
+    <link itemprop="mainEntityOfPage" href="http://roronoa.space/2017/07/18/learningPython_Module/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="roronoa">
@@ -267,7 +262,7 @@
             
             
               
-                关于操作系统我们应该知道些什么？--进程
+                一步一步学Python--模块
               
             
           </h1>
@@ -282,8 +277,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-02T18:05:00+08:00">
-                2017-07-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-18T20:21:00+08:00">
+                2017-07-18
               </time>
             
 
@@ -305,8 +300,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Operating-System/" itemprop="url" rel="index">
-                    <span itemprop="name">Operating System</span>
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
                   </a>
                 </span>
 
@@ -340,27 +335,35 @@
       
 
       
-        <h2 id="What-is-process"><a href="#What-is-process" class="headerlink" title="What is process?"></a>What is process?</h2><p>最简单的定义：<strong><em>进程(Process)</em></strong>是<strong>程序(Application)</strong>的一次运行实例(Instance of an executing program)。所以进程有时也被称为任务(<font color="#800080">task</font>  or <font color="#800080">job</font>)。<br>操作系统的功能之一是代表上层应用访问和管理底层硬件。而这里所指的应用，仅表示保存在某处(硬盘，闪存，甚至是云)的程序代码，是一个<strong>静态实体(static entity)</strong>，如下图所示:<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process1.png?imageMogr2/thumbnail/!50p" alt="static program entity"><br>当应用的程序代码被加载到内存，开始运行时，就生成了一个进程，所以进程是一个<strong>动态实体(active entity)</strong>。如果相同的应用被运行多次，那么就会对应的生成多个进程。每个进程都会执行相同的程序代码，但是运行状态各有不同，这进一步印证了进程是程序的一次运行实例。如下图所示：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process2.png?imageMogr2/thumbnail/!50p" alt="active process entity">  </p>
-<h2 id="What-does-a-process-look-like"><a href="#What-does-a-process-look-like" class="headerlink" title="What does a process look like?"></a>What does a process look like?</h2><p><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process3.png?imageMogr2/thumbnail/!50p" alt="process-structure">  </p>
-<ul>
-<li><em>text</em> : 程序代码。</li>
-<li><em>data</em> : 进程第一次初始化时的有效数据。<br>text和data是进程首次加载时的静态状态，在运行之前就可以确定。</li>
-<li><em>heap</em> : 运行时动态分配的内存空间(<strong>堆内存</strong>)。</li>
-<li><em>special area</em> : 不允许进程访问的内存空间。</li>
-<li><em>stack</em> : 以LIFO(后进先出，Last In First Out)规则管理的内存空间(<strong>栈内存</strong>)。可用来在执行过程切换时保存和恢复现场。</li>
-</ul>
-<p>进程占用的内存被称为<em>地址空间(address space)</em>。然而机器的内存大小总归是有限的，进程太多会导致物理内存空间不够用。并且让进程直接面向物理内存地址进行操作比较复杂，不同进程间地址空间的隔离性很差。为了避免这些问题，当处理器读或写入内存位置时，会使用<strong>虚拟地址(Virtual Address)</strong>，作为读或写操作的一部分，处理器同时会将虚拟地址转换为物理地址。这个转换往往是通过<strong>分页(Page)</strong>机制并配合一些策略来实现的。关于虚拟地址和内存管理的内容会在后续的博客中进行介绍，这里先有个大致印象。整体的映射关系可以见下图：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process4.png" alt="process-structure">  </p>
-<h2 id="How-does-the-OS-know-what-a-process-is-doing"><a href="#How-does-the-OS-know-what-a-process-is-doing" class="headerlink" title="How does the OS know what a process is doing?"></a>How does the OS know what a process is doing?</h2><h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>由于每个应用程序都是运行在某个进程的<em>上下文(Context)</em>中的。上下文是由程序正确运行所需的状态做成的。结合上文提到的进程占用内存空间的结构来看，这个状态包含存放在存储器中的程序的代码和数据，它的栈，通用目的寄存器的内容、程序计数器(PC,Program Counter)、环境变量以及打开文件描述符的集合等等。这些信息在操作系统中被一个称作<em>进程控制块(PCB,Process Control Block)</em>的结构体来统一管理，其结构如下图所示：<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process5.png?imageMogr2/thumbnail/!50p" alt="process-structure"><br>PCB在进程创建并初始化的时候会生成。操作系统根据PCB来获知当前进程的运行状态，进而用于进程切换时保存和恢复现场。</p>
-<h3 id="How-is-a-PCB-used"><a href="#How-is-a-PCB-used" class="headerlink" title="How is a PCB used?"></a>How is a PCB used?</h3><p><img src="http://osio2xhqh.bkt.clouddn.com/image/png/process6.png?imageMogr2/thumbnail/!50p" alt="process-structure"><br>在上图中可以看出，两个进程P1和P2在运行过程中都会载入自身的PCB。在进程执行的某些时刻，内核可以决定抢占当前进程，并重新开始一个先前被抢占的进程。这种决定就叫做<em>调度(schedule)</em>，是由内核中称为<em>调度器(scheduler)</em>的代码处理的，关于调度的问题这里不展开来谈。在内核调度了一个新的进程运行后，它就抢占当前进程，使用一种称作<em>上下文切换(Context Switch)</em>的机制来将控制转移到新的进程(实际上就是PCB信息的切换)，它包括：</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><font size="4"><strong>模块(Module)</strong></font>是Python程序的最高层组织单元。可以说，我们在Python世界中书写的代码都是必然存在于模块之中的。更具体而言，<strong>每一个文件就是一个模块，且模块可以引用(import)其他的模块</strong>。通常情况下，Python程序就是众多错综复杂且相互依赖的模块所组成的。所以了解模块对于我们了解Python项目的整体架构和运作方式都有着重要的意义。<br>本文将由浅入深，从基本概念着手，按照下面几个方面来进行讲解：</p>
 <ol>
-<li>保存当前进程的上下文。</li>
-<li>恢复某个先前被强占的进程被保存的上下文。</li>
-<li>将控制传递给这个新恢复的进程。</li>
+<li>为什么需要模块化？</li>
+<li>模块是如何运作的？</li>
+<li>模块基础编程实战</li>
+<li>模块包(Package)详解</li>
+<li>模块高阶用法</li>
 </ol>
-<p>上下文切换是一种十分昂贵的操作，原因有下面两点。</p>
+<p>希望读者读完这篇博客后能够对Python的模块知其然、知其所以然。并能熟练在日常开发中使用。</p>
+<h2 id="为什么需要模块化"><a href="#为什么需要模块化" class="headerlink" title="为什么需要模块化"></a>为什么需要模块化</h2><p>一言蔽之：模块化是一种处理复杂系统分解为更好的可管理模块的方式。<br>详细来说，模块化能够带来许多好处，下面列举三点：</p>
 <ul>
-<li>保存被抢占进程的PCB现场，并重新从抢占进程的PCB中恢复信息到内存和寄存器，这种save和load操作本身就会增加耗时。</li>
-<li>间接影响是上下文切换会导致CPU的<em>高速缓存污染(Cache pollution)</em>。对于新的进程而言，上一个进程在CPU高速缓存中保存的信息是无效的。我们通常称这个时候高速缓存的状态会由<strong>hot</strong>变为<strong>cold</strong>，必须再次预热。由于CPU高速缓存的速度要成倍优于内存，所以频繁的上下文切换将会极大影响进程的执行效率。</li>
+<li>代码重用<br>  因为模块本质上就是一个文件，与交互命令行中输入的代码不同，它可以被永久保存，并能作为一个重用单元按需重新装载或运行。所以使用模块可以用来实现一些公共服务供系统其他模块调用。</li>
+<li>分隔系统命名空间<br>  模块还可以看做是对象名称，也称为模块的属性(attributes)的集合，在Python中，每个模块都具有自己独立的命名空间(namespace)，相同名字的函数和变量完全可以分别存在不同的模块中，最大程度避免了函数名和变量名冲突。</li>
+<li>大大提高了代码的可维护性和开发效率。</li>
+</ul>
+<p>目前为止还比较抽象，现在我们来对Python程序的整体结构进行一个概览，以来更好的理解模块在Python程序中充当的角色。</p>
+<h2 id="模块是如何运作的？"><a href="#模块是如何运作的？" class="headerlink" title="模块是如何运作的？"></a>模块是如何运作的？</h2><p>在理解模块的运作方式之前，先让我们来看一下通常的Python程序结构是怎样的。</p>
+<h3 id="Python程序概览"><a href="#Python程序概览" class="headerlink" title="Python程序概览"></a>Python程序概览</h3><p>先把自己平时写着玩儿的脚本抛到脑后，大部分生产环境的Python项目都是<strong>多文件</strong>(multifile,也就是多模块)系统。通常来说，这些文件会包含有Python声明语句(statements)，并且至少包含一个顶层(top-level)的主(main)文件，以及0个或多个补充文件，也就是我们所说的模块。<br>主文件的作用在于控制程序的核心执行流程，模块则负责为主文件和其他模块提供服务。如何使用其他模块提供的服务就引出了Python模块知识体系内最重要的关键字：<font color="#800000"><strong>import</strong></font>。  </p>
+<h3 id="import"><a href="#import" class="headerlink" title="import"></a>import</h3><p><font size="4"><strong>import</strong></font>是将系统中各个相互孤立的模块串联起来的纽带。下面这张图勾勒了一个简单但是通用的Python示例程序结构。这个示例程序由三个文件组成。a.py为主文件，b.py和c.py为模块文件。<br><img src="http://osio2xhqh.bkt.clouddn.com/image/png/python_module_1.png?imageMogr2/thumbnail/!50p" alt=""><br>主文件a为了使用模块b提供的服务，代码中必然有这样一行(暂时先不考虑<em>from</em>的用法，后文会讲)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> b</div></pre></td></tr></table></figure>
+<p>这行代码的含义是：</p>
+<blockquote>
+<p>装载文件b.py(除非已经被装载过)，并通过模块名称b获得其所有属性的访问权限。</p>
+</blockquote>
+<p>为了实现这一目标，Python会顺次执行被import文件当中的声明语句。需要注意的有以下几点：</p>
+<ul>
+<li>在Python中，除非显示的在运行时(runtime)使用import关键字声明引用，否则是不会出现跨文件的模块链接(linking)关系解析的。亦即一个文件如果没有被import过的话，则是不会被解析的(主文件除外)。</li>
+<li>import声明中指定的模块名称在这里起到两个作用，其一为标识需要加载的模块文件名称(即b.py的文件名称)，其二该名称会作为装载模块的变量名(variable)供后续使用。</li>
+<li>模块中定义的对象也是在import后，在运行时生成的。举例来说，在主文件a引用模块b之后，可以通过b.spam引用模块b中的属性。这里的spam既可以是一个变量，也可以是一个函数。这种object.attribute类型的调用方式是引用模块当中变量的最常见方式。</li>
 </ul>
 
       
@@ -391,9 +394,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
-          
-            <a href="/tags/Process/" rel="tag"># Process</a>
+            <a href="/tags/Python/" rel="tag"># Python</a>
           
         </div>
       
@@ -406,8 +407,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/25/Java_concurrency_part_1_synchronizers/" rel="next" title="Java高级并发编程-Synchronizers">
-                <i class="fa fa-chevron-left"></i> Java高级并发编程-Synchronizers
+              <a href="/2017/07/11/Java_concurrency_threadPoolExecutor/" rel="next" title="Java线程池ThreadPoolExecutor原理探究">
+                <i class="fa fa-chevron-left"></i> Java线程池ThreadPoolExecutor原理探究
               </a>
             
           </div>
@@ -416,8 +417,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/03/hexo-imgbed/" rel="prev" title="使用七牛云搭建Hexo博客图床">
-                使用七牛云搭建Hexo博客图床 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/07/21/java_basic_ConcurrentModificationException/" rel="prev" title="Java基础知识-集合-ConcurrentModificationException异常原因和解决方法">
+                Java基础知识-集合-ConcurrentModificationException异常原因和解决方法 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -547,7 +548,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-process"><span class="nav-number">1.</span> <span class="nav-text">What is process?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-does-a-process-look-like"><span class="nav-number">2.</span> <span class="nav-text">What does a process look like?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-does-the-OS-know-what-a-process-is-doing"><span class="nav-number">3.</span> <span class="nav-text">How does the OS know what a process is doing?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PCB"><span class="nav-number">3.1.</span> <span class="nav-text">PCB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-is-a-PCB-used"><span class="nav-number">3.2.</span> <span class="nav-text">How is a PCB used?</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要模块化"><span class="nav-number">2.</span> <span class="nav-text">为什么需要模块化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块是如何运作的？"><span class="nav-number">3.</span> <span class="nav-text">模块是如何运作的？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python程序概览"><span class="nav-number">3.1.</span> <span class="nav-text">Python程序概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import"><span class="nav-number">3.2.</span> <span class="nav-text">import</span></a></li></ol></li></ol></div>
             
 
           </div>
