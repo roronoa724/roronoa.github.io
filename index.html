@@ -340,7 +340,7 @@
         
           
             <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">转载自：http://www.cnblogs.com/dolphin0520/p/3933551.html</div></pre></td></tr></table></figure>
-<p>在Java中，对Vector、ArrayList在迭代的时候如果同时对其进行修改就会抛出java.util.ConcurrentModificationException异常。下面我们就来讨论以下这个异常出现的原因以及解决办法。<br>以下是本文目录大纲：</p>
+<p>在Java中，对VArrayList在迭代同时也进行修改就会抛出ConcurrentModificationException异常。下面我们就来讨论以下这个异常出现的原因以及解决办法。<br>以下是本文目录大纲：</p>
 <ul>
 <li>ConcurrentModificationException异常出现的原因</li>
 <li>在单线程环境下的解决办法</li>
@@ -360,7 +360,7 @@
 <li>modCount是AbstractList类中的一个成员变量</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">transient</span> <span class="keyword">int</span> modCount = <span class="number">0</span>;</div></pre></td></tr></table></figure>
-<p>该值表示对List的修改次数，查看ArrayList的add()和remove()方法就可以发现，每次调用add()方法或者remove()方法就会对modCount进行加1操作。<br>好了，到这里我们再看看上面的程序：<br>当调用list.iterator()返回一个Iterator之后，通过Iterator的hashNext()方法判断是否还有元素未被访问，我们看一下hasNext()方法，hashNext()方法的实现很简单：</p>
+<p>该值表示对List的修改次数，查看ArrayList的add()和remove()方法就可以发现，每次调用add()方法或者remove()方法就会对modCount进行加1操作。<br>好了，到这里我们再看看上面的程序：<br>当调用list.iterator()返回一个Iterator之后，通过Iterator的hashNext()方法判断是否还有元素未被访问，我们看一下hasNext()方法，hasNext()方法的实现很简单：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> cursor != size();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果下一个访问的元素下标不等于ArrayList的大小，就表示有元素需要访问，这个很容易理解，如果下一个访问元素的下标等于ArrayList的大小，则肯定到达末尾了。<br>然后通过Iterator的next()方法获取到下标为0的元素，我们看一下next()方法的具体实现：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">    checkForComodification();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        E next = get(cursor);</div><div class="line">        lastRet = cursor++;</div><div class="line">        <span class="keyword">return</span> next;</div><div class="line">    &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</div><div class="line">        checkForComodification();</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
